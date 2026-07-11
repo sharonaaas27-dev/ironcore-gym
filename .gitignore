@@ -8,5 +8,4 @@ uploads/*
 *.log
 *.err
 *.tsbuildinfo
-*.d.ts
 .qodo/

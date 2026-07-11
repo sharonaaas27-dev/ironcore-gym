@@ -12,6 +12,7 @@ dist/
 # Generated type declarations
 *.d.ts
 !src/vite-env.d.ts
+!src/types/*.d.ts
 
 # Logs
 *.log
