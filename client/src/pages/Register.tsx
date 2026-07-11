@@ -59,8 +59,8 @@ export default function Register() {
               if (googleUser.role === 'admin') navigate('/admin');
               else if (googleUser.role === 'trainer') navigate('/trainer/dashboard');
               else navigate('/dashboard');
-            } catch {
-              // error handled by context
+            } catch (err: any) {
+              setGoogleError(err?.response?.data?.message || err?.message || 'Google login failed. Check that the backend is running.');
             }
           }
         },

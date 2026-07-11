@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@components/navbar/Navbar';
 import Footer from '@components/layout/Footer';
@@ -24,6 +24,7 @@ declare global {
 export default function Login() {
   const { login, googleLogin, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState('');
   const googleBtnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,8 +51,8 @@ export default function Login() {
             if (googleUser.role === 'admin') navigate('/admin');
             else if (googleUser.role === 'trainer') navigate('/trainer/dashboard');
             else navigate('/dashboard');
-          } catch {
-            // error handled by context
+          } catch (err: any) {
+            setError(err?.response?.data?.message || err?.message || 'Google login failed. Check that the backend is running.');
           }
         },
       });
@@ -93,6 +94,7 @@ export default function Login() {
           </div>
           <GlassCard className="p-8">
             <AuthForm mode="login" onSubmit={handleLogin} />
+            {error && <p className="mt-3 text-center text-sm text-red-500">{error}</p>}
             {googleClientId && (
               <>
                 <div className="relative my-6">
