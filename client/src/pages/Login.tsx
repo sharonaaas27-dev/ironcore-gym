@@ -1,0 +1,122 @@
+import { useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '@components/navbar/Navbar';
+import Footer from '@components/layout/Footer';
+import PageTransition from '@components/ui/PageTransition';
+import GlassCard from '@components/ui/GlassCard';
+import AuthForm from '@components/forms/AuthForm';
+import { useAuth } from '@context/AuthContext';
+import { setNavigate } from '@utils/navigation';
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void;
+          renderButton: (element: HTMLElement, options: { theme: string; size: string; width?: string }) => void;
+        };
+      };
+    };
+  }
+}
+
+export default function Login() {
+  const { login, googleLogin, isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
+  const googleBtnRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setNavigate(navigate);
+  }, [navigate]);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'admin') navigate('/admin');
+      else if (user.role === 'trainer') navigate('/trainer/dashboard');
+      else navigate('/dashboard');
+    }
+  }, [isAuthenticated, user, navigate]);
+
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  useEffect(() => {
+    if (googleBtnRef.current && window.google && googleClientId) {
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: async (response) => {
+          try {
+            const googleUser = await googleLogin({ credential: response.credential });
+            if (googleUser.role === 'admin') navigate('/admin');
+            else if (googleUser.role === 'trainer') navigate('/trainer/dashboard');
+            else navigate('/dashboard');
+          } catch {
+            // error handled by context
+          }
+        },
+      });
+      window.google.accounts.id.renderButton(googleBtnRef.current, {
+        theme: 'outline',
+        size: 'large',
+        width: '320',
+      });
+    }
+  }, [googleLogin, navigate, googleClientId]);
+
+  const handleLogin = async (data: { email: string; password: string; remember?: boolean }) => {
+    try {
+      const user = await login(data.email, data.password, data.remember);
+      if (user.role === 'admin') navigate('/admin');
+      else if (user.role === 'trainer') navigate('/trainer/dashboard');
+      else navigate('/dashboard');
+    } catch (err: any) {
+      if (err?.response?.status === 403) {
+        navigate('/trainer/pending');
+        return;
+      }
+      throw err;
+    }
+  };
+
+  return (
+    <PageTransition>
+      <div className="noise-bg" />
+      <Navbar />
+      <main className="flex min-h-screen items-center justify-center pt-24">
+        <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
+        <div className="relative w-full max-w-md px-6 py-16">
+          <div className="mb-8 text-center">
+            <h1 className="text-display-sm font-bold">
+              Welcome <span className="gradient-text">Back</span>
+            </h1>
+            <p className="mt-2 text-luxury-gray">Sign in to continue your fitness journey.</p>
+          </div>
+          <GlassCard className="p-8">
+            <AuthForm mode="login" onSubmit={handleLogin} />
+            {googleClientId && (
+              <>
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-glass-light" />
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="bg-luxury-charcoal px-4 text-luxury-gray">or continue with</span>
+                  </div>
+                </div>
+                <div ref={googleBtnRef} className="flex justify-center" />
+              </>
+            )}
+            <div className="mt-6 text-center text-sm text-luxury-gray">
+              <Link to="/forgot-password" className="text-gold-500 hover:text-gold-400">Forgot password?</Link>
+            </div>
+            <div className="mt-4 text-center text-sm text-luxury-gray">
+              Don't have an account?{' '}
+              <Link to="/register" className="text-gold-500 hover:text-gold-400">Sign up</Link>
+            </div>
+          </GlassCard>
+        </div>
+      </main>
+      <Footer />
+    </PageTransition>
+  );
+}

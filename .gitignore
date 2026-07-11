@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.local
+dist/
+uploads/*
+!uploads/.gitkeep
+.DS_Store
+*.log
+*.err
+*.tsbuildinfo
+*.d.ts
+.qodo/
