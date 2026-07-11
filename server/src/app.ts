@@ -27,10 +27,20 @@ import adminRoutes from './routes/admin';
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(compression());
 app.use(cors({
-  origin: config.clientUrl,
+  origin: (origin, callback) => {
+    const allowed = config.clientUrl.split(',').map((u) => u.trim()).filter(Boolean);
+    allowed.push('http://localhost:5173');
+    if (!origin || allowed.some((a) => origin.startsWith(a))) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(morgan('dev'));
