@@ -26,6 +26,9 @@ export const googleLogin = async (req: Request, res: Response) => {
 
     const { credential, role, bio, specialties, experience, phone, certificates } = parsed.data;
 
+    console.log('[DEBUG] googleClientId:', JSON.stringify(config.googleClientId));
+    console.log('[DEBUG] credential starts with:', credential?.substring(0, 30));
+
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
       audience: config.googleClientId,

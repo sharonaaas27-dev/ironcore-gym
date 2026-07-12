@@ -132,8 +132,7 @@ app.get('/api/debug-config', (_req, res) => {
   res.json({
     nodeEnv: config.nodeEnv,
     clientUrl: config.clientUrl,
-    googleClientIdSet: config.googleClientId.length > 0,
-    googleClientIdPrefix: config.googleClientId.substring(0, 12) + '...',
+    googleClientId: config.googleClientId,
     googleClientIdLength: config.googleClientId.length,
     adminEmail: config.adminEmail,
     mongoConnected: mongoose.connection.readyState === 1,
