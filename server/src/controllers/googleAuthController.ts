@@ -29,6 +29,20 @@ export const googleLogin = async (req: Request, res: Response) => {
     console.log('[DEBUG] googleClientId:', JSON.stringify(config.googleClientId));
     console.log('[DEBUG] credential starts with:', credential?.substring(0, 30));
 
+    // Decode the JWT payload to see actual audience
+    try {
+      const parts = credential.split('.');
+      if (parts.length === 3) {
+        const decoded = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
+        console.log('[DEBUG] token aud:', decoded.aud);
+        console.log('[DEBUG] token azp:', decoded.azp);
+        console.log('[DEBUG] token iss:', decoded.iss);
+        console.log('[DEBUG] token email:', decoded.email);
+      }
+    } catch (e) {
+      console.log('[DEBUG] could not decode token:', e);
+    }
+
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
       audience: config.googleClientId,
