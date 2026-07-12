@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import mongoose from 'mongoose';
 import { config } from './config';
 import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './routes/auth';
@@ -125,6 +126,19 @@ app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({ success: true, message: 'IRONCORE API is running', timestamp: new Date().toISOString() });
+});
+
+app.get('/api/debug-config', (_req, res) => {
+  res.json({
+    nodeEnv: config.nodeEnv,
+    clientUrl: config.clientUrl,
+    googleClientIdSet: config.googleClientId.length > 0,
+    googleClientIdPrefix: config.googleClientId.substring(0, 12) + '...',
+    googleClientIdLength: config.googleClientId.length,
+    adminEmail: config.adminEmail,
+    mongoConnected: mongoose.connection.readyState === 1,
+    port: config.port,
+  });
 });
 
 app.use(errorHandler);
