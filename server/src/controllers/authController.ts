@@ -16,7 +16,7 @@ const setCookie = (res: Response, token: string) => {
   res.cookie('token', token, {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
-    sameSite: 'strict',
+    sameSite: config.nodeEnv === 'production' ? 'none' : 'strict',
     maxAge: config.jwtCookieExpiresIn * 24 * 60 * 60 * 1000,
   });
 };
