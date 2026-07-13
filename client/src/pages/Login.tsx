@@ -15,7 +15,6 @@ declare global {
         id: {
           initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void;
           renderButton: (element: HTMLElement, options: { theme: string; size: string; width?: string }) => void;
-          prompt: () => void;
         };
       };
     };
@@ -27,7 +26,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const googleInitialized = useRef(false);
+  const googleBtnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setNavigate(navigate);
@@ -44,8 +43,7 @@ export default function Login() {
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
   useEffect(() => {
-    if (!googleInitialized.current && window.google && googleClientId) {
-      googleInitialized.current = true;
+    if (googleBtnRef.current && window.google && googleClientId) {
       window.google.accounts.id.initialize({
         client_id: googleClientId,
         callback: async (response) => {
@@ -60,6 +58,11 @@ export default function Login() {
             setError(err?.response?.data?.message || err?.message || 'Google login failed. Check that the backend is running.');
           }
         },
+      });
+      window.google.accounts.id.renderButton(googleBtnRef.current, {
+        theme: 'filled_black',
+        size: 'large',
+        width: '320',
       });
     }
   }, [googleLogin, navigate, googleClientId]);
@@ -113,13 +116,7 @@ export default function Login() {
                     <span className="bg-luxury-charcoal px-4 text-luxury-gray">or continue with</span>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => window.google?.accounts.id.prompt()}
-                  className="flex w-full items-center justify-center rounded-full border-2 border-gold-500 bg-black px-5 py-3 transition-all hover:bg-gold-500/10"
-                >
-                  <span className="text-base font-bold" style={{ color: '#FBBC05' }}>G</span>
-                </button>
+                <div ref={googleBtnRef} className="flex justify-center" />
               </>
             )}
             <div className="mt-6 text-center text-sm text-luxury-gray">

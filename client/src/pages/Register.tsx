@@ -15,7 +15,6 @@ declare global {
         id: {
           initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void;
           renderButton: (element: HTMLElement, options: { theme: string; size: string; width?: string }) => void;
-          prompt: () => void;
         };
       };
     };
@@ -25,7 +24,7 @@ declare global {
 export default function Register() {
   const { register, googleLogin, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
-  const googleInitialized = useRef(false);
+  const googleBtnRef = useRef<HTMLDivElement>(null);
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const [googleRole, setGoogleRole] = useState<'user' | 'trainer'>('user');
   const [showGoogleProfile, setShowGoogleProfile] = useState(false);
@@ -47,8 +46,7 @@ export default function Register() {
   }, [isAuthenticated, user, navigate]);
 
   useEffect(() => {
-    if (!googleInitialized.current && window.google && googleClientId) {
-      googleInitialized.current = true;
+    if (googleBtnRef.current && window.google && googleClientId) {
       window.google.accounts.id.initialize({
         client_id: googleClientId,
         callback: async (response) => {
@@ -66,6 +64,11 @@ export default function Register() {
             }
           }
         },
+      });
+      window.google.accounts.id.renderButton(googleBtnRef.current, {
+        theme: 'filled_black',
+        size: 'large',
+        width: '320',
       });
     }
   }, [googleLogin, navigate, googleClientId, googleRole]);
@@ -244,13 +247,7 @@ export default function Register() {
                         Trainer
                       </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => window.google?.accounts.id.prompt()}
-                      className="flex w-full items-center justify-center rounded-full border-2 border-gold-500 bg-black px-5 py-3 transition-all hover:bg-gold-500/10"
-                    >
-                      <span className="text-base font-bold" style={{ color: '#FBBC05' }}>G</span>
-                    </button>
+                    <div ref={googleBtnRef} className="flex justify-center" />
                   </>
                 )}
               </>
