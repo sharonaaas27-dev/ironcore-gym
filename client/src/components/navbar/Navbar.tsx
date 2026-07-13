@@ -61,26 +61,36 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
+          {user?.role === 'admin' ? (
             <Link
-              key={link.href}
-              to={link.href}
-              className={cn(
-                'group relative text-sm font-medium tracking-wider uppercase transition-colors',
-                location.pathname === link.href
-                  ? 'text-gold-500'
-                  : 'text-luxury-gray hover:text-white'
-              )}
+              to="/admin"
+              className="flex items-center gap-2 rounded-full border border-gold-500/30 px-4 py-2 text-sm font-medium text-gold-500 transition-all hover:bg-gold-500/10"
             >
-              {link.label}
-              <span
-                className={cn(
-                  'absolute -bottom-1 left-0 h-[2px] bg-gold-500 transition-all duration-300',
-                  location.pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
-                )}
-              />
+              <HiShieldCheck size={16} />
+              Admin Panel
             </Link>
-          ))}
+          ) : (
+            navLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={cn(
+                  'group relative text-sm font-medium tracking-wider uppercase transition-colors',
+                  location.pathname === link.href
+                    ? 'text-gold-500'
+                    : 'text-luxury-gray hover:text-white'
+                )}
+              >
+                {link.label}
+                <span
+                  className={cn(
+                    'absolute -bottom-1 left-0 h-[2px] bg-gold-500 transition-all duration-300',
+                    location.pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
+                  )}
+                />
+              </Link>
+            ))
+          )}
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
               {user?.role === 'admin' && (
@@ -92,20 +102,24 @@ export default function Navbar() {
                   Admin
                 </Link>
               )}
-              <Link
-                to={user?.role === 'trainer' ? '/trainer/dashboard' : '/dashboard'}
-                className="flex items-center gap-1.5 rounded-full bg-gold-500 px-4 py-2 text-sm font-semibold text-luxury-black transition-all hover:bg-gold-400"
-              >
-                <HiViewGrid size={16} />
-                Dashboard
-              </Link>
-              <Link
-                to="/messages"
-                className="flex items-center gap-1.5 rounded-full border border-glass-light px-4 py-2 text-sm font-medium text-luxury-gray transition-all hover:border-gold-500/30 hover:text-white"
-              >
-                <HiMail size={16} />
-                Messages
-              </Link>
+              {user?.role !== 'admin' && (
+                <>
+                  <Link
+                    to={user?.role === 'trainer' ? '/trainer/dashboard' : '/dashboard'}
+                    className="flex items-center gap-1.5 rounded-full bg-gold-500 px-4 py-2 text-sm font-semibold text-luxury-black transition-all hover:bg-gold-400"
+                  >
+                    <HiViewGrid size={16} />
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/messages"
+                    className="flex items-center gap-1.5 rounded-full border border-glass-light px-4 py-2 text-sm font-medium text-luxury-gray transition-all hover:border-gold-500/30 hover:text-white"
+                  >
+                    <HiMail size={16} />
+                    Messages
+                  </Link>
+                </>
+              )}
               <div className="relative flex items-center gap-2 border-l border-glass-light pl-3" ref={accountMenuRef}>
                 <button
                   onClick={() => setShowAccountMenu(!showAccountMenu)}
@@ -197,40 +211,50 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -20 }}
             className="glass-dark fixed inset-0 flex flex-col items-center justify-center gap-8 md:hidden"
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={cn(
-                  'text-2xl font-bold tracking-wider uppercase transition-colors',
-                  location.pathname === link.href
-                    ? 'gradient-text'
-                    : 'text-white hover:text-gold-500'
-                )}
-              >
-                {link.label}
+            {user?.role === 'admin' ? (
+              <Link to="/admin" className="text-2xl font-bold tracking-wider uppercase text-gold-500">
+                Admin Panel
               </Link>
-            ))}
-            {isAuthenticated ? (
-              <>
-                {user?.role === 'admin' && (
-                  <Link to="/admin" className="text-2xl font-bold tracking-wider uppercase text-gold-500">
-                    Admin Panel
-                  </Link>
-                )}
+            ) : (
+              navLinks.map((link) => (
                 <Link
-                  to={user?.role === 'trainer' ? '/trainer/dashboard' : '/dashboard'}
-                  className="text-2xl font-bold tracking-wider uppercase text-white"
+                  key={link.href}
+                  to={link.href}
+                  className={cn(
+                    'text-2xl font-bold tracking-wider uppercase transition-colors',
+                    location.pathname === link.href
+                      ? 'gradient-text'
+                      : 'text-white hover:text-gold-500'
+                  )}
                 >
-                  Dashboard
+                  {link.label}
                 </Link>
+              ))
+            )}
+            {isAuthenticated ? (
+              user?.role === 'admin' ? (
                 <button
                   onClick={() => { logout(); navigate('/login'); setIsOpen(false); }}
                   className="text-2xl font-bold tracking-wider uppercase text-red-400"
                 >
                   Logout
                 </button>
-              </>
+              ) : (
+                <>
+                  <Link
+                    to={user?.role === 'trainer' ? '/trainer/dashboard' : '/dashboard'}
+                    className="text-2xl font-bold tracking-wider uppercase text-white"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => { logout(); navigate('/login'); setIsOpen(false); }}
+                    className="text-2xl font-bold tracking-wider uppercase text-red-400"
+                  >
+                    Logout
+                  </button>
+                </>
+              )
             ) : (
               <>
                 <Link to="/login" className="text-2xl font-bold tracking-wider uppercase text-white">

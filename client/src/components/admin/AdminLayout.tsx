@@ -6,7 +6,7 @@ import api from '@services/api';
 import {
   HiViewGrid, HiPencilAlt, HiCollection, HiUserGroup, HiCreditCard,
   HiPhotograph, HiShoppingBag, HiQuestionMarkCircle, HiMail,
-  HiCalendar, HiUsers, HiMenu, HiX, HiLogout, HiCurrencyDollar, HiAcademicCap, HiStar,
+  HiCalendar, HiUsers, HiMenu, HiX, HiLogout, HiCurrencyDollar, HiAcademicCap, HiStar, HiChat,
 } from 'react-icons/hi';
 
 export default function AdminLayout() {
@@ -28,6 +28,7 @@ export default function AdminLayout() {
     { to: '/admin/enrollments', icon: HiAcademicCap, label: 'Enrollments' },
     { to: '/admin/users', icon: HiUsers, label: 'Users' },
     { to: '/admin/trainer-requests', icon: HiStar, label: 'Trainer Requests', badge: pendingCount },
+    { to: '/messages', icon: HiChat, label: 'Messages' },
   ];
   const { user, logout } = useAuth();
   const navigate = useNavigate();

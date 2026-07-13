@@ -6,6 +6,7 @@ import PageTransition from '@components/ui/PageTransition';
 import SectionHeading from '@components/ui/SectionHeading';
 import AnimatedCounter from '@components/ui/AnimatedCounter';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
+import { useAuth } from '@context/AuthContext';
 import api from '@services/api';
 
 const fallbackStats = [
@@ -32,6 +33,7 @@ const values = [
 ];
 
 export default function About() {
+  const { user } = useAuth();
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
   const [stats, setStats] = useState(fallbackStats);
 
@@ -40,6 +42,7 @@ export default function About() {
   }, []);
 
   useEffect(() => {
+    if (user?.role !== 'admin') return;
     const fetchStats = async () => {
       try {
         const res = await api.get('/admin/analytics');
@@ -57,7 +60,7 @@ export default function About() {
       }
     };
     fetchStats();
-  }, []);
+  }, [user]);
 
   return (
     <PageTransition>

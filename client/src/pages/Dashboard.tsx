@@ -98,6 +98,9 @@ export default function Dashboard() {
         setUserPrograms(progResult.value.data.data || []);
       }
 
+      const anyRejected = results.some((r) => r.status === 'rejected');
+      if (anyRejected) setError(true);
+
       setLoading(false);
     };
     fetchData();

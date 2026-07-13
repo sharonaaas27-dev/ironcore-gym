@@ -31,6 +31,7 @@ export default function AdminContacts() {
   const [selected, setSelected] = useState<ContactMessage | null>(null);
   const [replyMessage, setReplyMessage] = useState('');
   const [sending, setSending] = useState(false);
+  const [emailWarning, setEmailWarning] = useState('');
 
   const fetch = useCallback(() => {
     setLoading(true);
@@ -53,11 +54,15 @@ export default function AdminContacts() {
     if (!replyMessage.trim() || !selected || sending) return;
     setSending(true);
     try {
+      setEmailWarning('');
       const res = await api.post(`/contact/${selected._id}/reply`, { message: replyMessage.trim() });
       const updated = res.data.data;
       setMessages((prev) => prev.map((m) => m._id === updated._id ? updated : m));
       setSelected(updated);
       setReplyMessage('');
+      if (res.data.emailSent === false) {
+        setEmailWarning('Reply saved but the email notification could not be sent to the user. Check SMTP configuration.');
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -156,6 +161,12 @@ export default function AdminContacts() {
                   )}
                 </div>
 
+                {/* Email Warning */}
+                {emailWarning && (
+                  <div className="mx-4 mt-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-400">
+                    {emailWarning}
+                  </div>
+                )}
                 {/* Reply Form */}
                 <div className="mt-auto border-t border-glass-light p-4">
                   <div className="flex gap-3">

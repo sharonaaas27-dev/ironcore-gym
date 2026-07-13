@@ -22,7 +22,7 @@ export const ENDPOINTS = {
   PROGRAMS: {
     ALL: '/programs',
     DETAIL: (slug: string) => `/programs/${slug}`,
-    ENROLL: (id: string) => `/programs/${id}/enroll`,
+    ENROLL: (slug: string) => `/programs/${slug}/enroll`,
   },
   TRAINERS: {
     ALL: '/trainers',

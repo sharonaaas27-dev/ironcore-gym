@@ -116,6 +116,24 @@ export default function Checkout() {
     navigate('/dashboard');
   };
 
+  if (!stripePromise) {
+    return (
+      <PageTransition>
+        <div className="noise-bg" />
+        <Navbar />
+        <main className="pt-32">
+          <section className="relative min-h-screen py-32 text-center">
+            <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
+            <div className="relative mx-auto max-w-lg px-6">
+              <p className="text-luxury-gray">Payment system is not configured. Please contact support.</p>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </PageTransition>
+    );
+  }
+
   if (step === 'payment' && clientSecret) {
     const options: StripeElementsOptions = { clientSecret, appearance: { theme: 'night', variables: { colorPrimary: '#D4AF37' } } };
     return (

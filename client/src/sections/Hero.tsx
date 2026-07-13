@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import MagneticButton from '@components/buttons/MagneticButton';
 import AnimatedCounter from '@components/ui/AnimatedCounter';
 import api from '@services/api';
+import { useAuth } from '@context/AuthContext';
 
 const fallbackStats = [
   { target: 5000, suffix: '+', label: 'Active Members' },
@@ -18,7 +19,10 @@ export default function Hero() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const [stats, setStats] = useState(fallbackStats);
 
+  const { user } = useAuth();
+
   useEffect(() => {
+    if (user?.role !== 'admin') return;
     const fetchStats = async () => {
       try {
         const res = await api.get('/admin/analytics');
@@ -35,7 +39,7 @@ export default function Hero() {
       }
     };
     fetchStats();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {

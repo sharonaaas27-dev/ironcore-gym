@@ -17,7 +17,7 @@ router.post('/', asyncHandler(async (req, res) => {
 
     const contact = await Contact.create(parsed.data);
 
-    sendContactNotification(config.emailFrom, parsed.data.name, parsed.data.email, parsed.data.subject, parsed.data.message).catch(() => {});
+    sendContactNotification(config.adminEmail, parsed.data.name, parsed.data.email, parsed.data.subject, parsed.data.message).catch(() => {});
 
     res.status(201).json({ success: true, data: contact });
   } catch {
@@ -75,25 +75,30 @@ router.post('/:id/reply', protect, authorize('admin', 'trainer'), asyncHandler(a
 
     const populated = await Contact.findById(contact._id).populate('replies.repliedBy', 'name');
 
-    await sendEmail({
-      to: contact.email,
-      subject: `Re: ${contact.subject}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #d4a017;">IRONCORE Gym</h2>
-          <p>Dear ${contact.name},</p>
-          <p>${req.user!.name} has replied to your message:</p>
-          <div style="margin: 20px 0; padding: 20px; background: #f5f5f5; border-radius: 8px;">
-            <p>${message.trim()}</p>
+    let emailSent = true;
+    try {
+      await sendEmail({
+        to: contact.email,
+        subject: `Re: ${contact.subject}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #d4a017;">IRONCORE Gym</h2>
+            <p>Dear ${contact.name},</p>
+            <p>${req.user!.name} has replied to your message:</p>
+            <div style="margin: 20px 0; padding: 20px; background: #f5f5f5; border-radius: 8px;">
+              <p>${message.trim()}</p>
+            </div>
+            <hr>
+            <p style="color: #666; font-size: 12px;">Your original message:</p>
+            <p style="color: #666; font-size: 12px;">${contact.message}</p>
           </div>
-          <hr>
-          <p style="color: #666; font-size: 12px;">Your original message:</p>
-          <p style="color: #666; font-size: 12px;">${contact.message}</p>
-        </div>
-      `,
-    }).catch(() => {});
+        `,
+      });
+    } catch {
+      emailSent = false;
+    }
 
-    res.json({ success: true, data: populated });
+    res.json({ success: true, data: populated, emailSent });
   } catch {
     res.status(500).json({ success: false, message: 'Failed to send reply' });
   }

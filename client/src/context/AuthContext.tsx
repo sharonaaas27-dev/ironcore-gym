@@ -125,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return newUser;
   };
 
-  const googleLogin = async (data: GoogleSignUpData) => {
+  const googleLogin = useCallback(async (data: GoogleSignUpData) => {
     const res = await api.post('/auth/google', data);
     const { user: googleUser, token: googleToken } = res.data.data;
     if (googleToken) {
@@ -134,7 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       refreshSavedAccounts();
     }
     return googleUser;
-  };
+  }, []);
 
   const logout = () => {
     setAuth(null, null);
