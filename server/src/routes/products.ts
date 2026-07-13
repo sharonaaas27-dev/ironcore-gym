@@ -47,7 +47,16 @@ router.post('/', protect, authorize('admin'), upload.array('images', 5), asyncHa
       parsed.data.images = uploadedUrls;
     }
 
-    const product = await Product.create({ ...parsed.data, slug: slugify(parsed.data.name) });
+    let slug = slugify(parsed.data.name);
+    const existingSlug = await Product.findOne({ slug });
+    if (existingSlug) {
+      let counter = 1;
+      while (await Product.findOne({ slug: `${slug}-${counter}` })) {
+        counter++;
+      }
+      slug = `${slug}-${counter}`;
+    }
+    const product = await Product.create({ ...parsed.data, slug });
     res.status(201).json({ success: true, data: product });
   } catch {
     res.status(500).json({ success: false, message: 'Failed to create product' });
