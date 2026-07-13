@@ -60,7 +60,7 @@ export default function Login() {
         },
       });
       window.google.accounts.id.renderButton(googleBtnRef.current, {
-        theme: 'outline',
+        theme: 'filled_black',
         size: 'large',
         width: '320',
       });
