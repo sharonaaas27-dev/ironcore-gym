@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { protect, authorize } from '../middleware/auth';
+import { protect, authorize, AuthRequest } from '../middleware/auth';
 import Contact from '../models/Contact';
 import { contactSchema } from '../validation/contact';
 import { sendContactNotification, sendEmail } from '../services/emailService';
@@ -25,16 +25,16 @@ router.post('/', asyncHandler(async (req, res) => {
   }
 }));
 
-router.get('/', protect, authorize('admin'), asyncHandler(async (_req, res) => {
+router.get('/', protect, authorize('admin', 'trainer'), asyncHandler(async (_req, res) => {
   try {
-    const messages = await Contact.find().sort('-createdAt');
+    const messages = await Contact.find().sort('-createdAt').populate('replies.repliedBy', 'name');
     res.json({ success: true, count: messages.length, data: messages });
   } catch {
     res.status(500).json({ success: false, message: 'Failed to fetch messages' });
   }
 }));
 
-router.put('/:id/read', protect, authorize('admin'), asyncHandler(async (req, res) => {
+router.put('/:id/read', protect, authorize('admin', 'trainer'), asyncHandler(async (req, res) => {
   try {
     const message = await Contact.findByIdAndUpdate(req.params.id, { read: true }, { new: true });
     if (!message) return res.status(404).json({ success: false, message: 'Message not found' });
@@ -44,34 +44,47 @@ router.put('/:id/read', protect, authorize('admin'), asyncHandler(async (req, re
   }
 }));
 
-router.post('/:id/reply', protect, authorize('admin'), asyncHandler(async (req, res) => {
+router.post('/:id/reply', protect, authorize('admin', 'trainer'), asyncHandler(async (req: AuthRequest, res) => {
   try {
-    const { subject, message } = req.body;
-    if (!subject || !message) {
-      return res.status(400).json({ success: false, message: 'Subject and message are required' });
+    const { message } = req.body;
+    if (!message || !message.trim()) {
+      return res.status(400).json({ success: false, message: 'Reply message is required' });
     }
 
     const contact = await Contact.findById(req.params.id);
     if (!contact) return res.status(404).json({ success: false, message: 'Message not found' });
 
+    const reply = {
+      message: message.trim(),
+      repliedBy: req.user!._id,
+      createdAt: new Date(),
+    };
+
+    contact.replies.push(reply);
+    contact.status = 'replied';
+    await contact.save();
+
+    const populated = await Contact.findById(contact._id).populate('replies.repliedBy', 'name');
+
     await sendEmail({
       to: contact.email,
-      subject: `Re: ${contact.subject} — ${subject}`,
+      subject: `Re: ${contact.subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #d4a017;">IRONCORE Gym</h2>
           <p>Dear ${contact.name},</p>
+          <p>${req.user!.name} has replied to your message:</p>
           <div style="margin: 20px 0; padding: 20px; background: #f5f5f5; border-radius: 8px;">
-            <p>${message}</p>
+            <p>${message.trim()}</p>
           </div>
           <hr>
           <p style="color: #666; font-size: 12px;">Your original message:</p>
           <p style="color: #666; font-size: 12px;">${contact.message}</p>
         </div>
       `,
-    });
+    }).catch(() => {});
 
-    res.json({ success: true, message: 'Reply sent' });
+    res.json({ success: true, data: populated });
   } catch {
     res.status(500).json({ success: false, message: 'Failed to send reply' });
   }

@@ -3,6 +3,9 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import LoadingScreen from '@components/ui/LoadingScreen';
 import ScrollToTop from '@components/ui/ScrollToTop';
+import PageTransition from '@components/ui/PageTransition';
+import Navbar from '@components/navbar/Navbar';
+import Footer from '@components/layout/Footer';
 import AdminRoute from '@components/admin/AdminRoute';
 import ProtectedRoute from '@components/admin/ProtectedRoute';
 import TrainerRoute from '@components/admin/TrainerRoute';
@@ -92,6 +95,7 @@ export default function App() {
             <Route path="/careers" element={<Careers />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/trainer/dashboard" element={<TrainerRoute><TrainerDashboard /></TrainerRoute>} />
+            <Route path="/trainer/contacts" element={<TrainerRoute><PageTransition><div className="noise-bg" /><Navbar /><main className="min-h-screen pt-32"><div className="relative mx-auto max-w-7xl px-6 py-16"><AdminContacts /></div></main><Footer /></PageTransition></TrainerRoute>} />
             <Route path="/trainer/pending" element={<TrainerPending />} />
             <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="/privacy" element={<Privacy />} />

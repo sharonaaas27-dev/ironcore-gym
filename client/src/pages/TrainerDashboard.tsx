@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HiCalendar, HiUserGroup, HiClock, HiCheck, HiX, HiUserAdd, HiPhotograph, HiSave, HiUsers } from 'react-icons/hi';
+import { HiCalendar, HiUserGroup, HiClock, HiCheck, HiX, HiUserAdd, HiPhotograph, HiSave, HiUsers, HiMail } from 'react-icons/hi';
 import Navbar from '@components/navbar/Navbar';
 import Footer from '@components/layout/Footer';
 import PageTransition from '@components/ui/PageTransition';
@@ -193,6 +193,19 @@ export default function TrainerDashboard() {
                       </div>
                     </GlassCard>
                   ))}
+                  <button onClick={() => navigate('/trainer/contacts')} className="text-left">
+                    <GlassCard hover={false} className="p-6 transition-all hover:border-gold-500/30">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20">
+                          <HiMail className="text-blue-500" size={24} />
+                        </div>
+                        <div>
+                          <p className="text-sm text-luxury-gray">Messages</p>
+                          <p className="text-2xl font-bold text-white">Contacts</p>
+                        </div>
+                      </div>
+                    </GlassCard>
+                  </button>
                 </div>
 
                 <GlassCard className="p-8">

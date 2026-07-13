@@ -1,8 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
-import { HiMail, HiCheck, HiEye } from 'react-icons/hi';
+import { HiMail, HiCheck, HiEye, HiPaperAirplane, HiReply } from 'react-icons/hi';
 import { cn } from '@utils/cn';
 import api from '@services/api';
 import { formatDate } from '@utils/helpers';
+import { useAuth } from '@context/AuthContext';
+
+interface Reply {
+  _id: string;
+  message: string;
+  repliedBy: { _id: string; name: string };
+  createdAt: string;
+}
 
 interface ContactMessage {
   _id: string;
@@ -11,13 +19,18 @@ interface ContactMessage {
   subject: string;
   message: string;
   read: boolean;
+  status: 'open' | 'replied';
+  replies: Reply[];
   createdAt: string;
 }
 
 export default function AdminContacts() {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<ContactMessage | null>(null);
+  const [replyMessage, setReplyMessage] = useState('');
+  const [sending, setSending] = useState(false);
 
   const fetch = useCallback(() => {
     setLoading(true);
@@ -36,6 +49,22 @@ export default function AdminContacts() {
     } catch (err) { console.error(err); }
   };
 
+  const handleReply = async () => {
+    if (!replyMessage.trim() || !selected || sending) return;
+    setSending(true);
+    try {
+      const res = await api.post(`/contact/${selected._id}/reply`, { message: replyMessage.trim() });
+      const updated = res.data.data;
+      setMessages((prev) => prev.map((m) => m._id === updated._id ? updated : m));
+      setSelected(updated);
+      setReplyMessage('');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <div>
       <div className="mb-6">
@@ -48,7 +77,7 @@ export default function AdminContacts() {
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
         </div>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 xl:grid-cols-2">
           {/* List */}
           <div className="rounded-xl border border-glass-light bg-luxury-charcoal/50">
             {messages.length === 0 ? (
@@ -80,21 +109,76 @@ export default function AdminContacts() {
           </div>
 
           {/* Detail */}
-          <div className="rounded-xl border border-glass-light bg-luxury-charcoal/50 p-6">
+          <div className="flex flex-col rounded-xl border border-glass-light bg-luxury-charcoal/50">
             {selected ? (
-              <div>
-                <div className="mb-4 flex items-start justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-white">{selected.subject}</h3>
-                    <p className="text-sm text-luxury-gray">{selected.name} &lt;{selected.email}&gt;</p>
+              <div className="flex flex-1 flex-col">
+                <div className="p-6 pb-0">
+                  <div className="mb-4 flex items-start justify-between">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <h3 className="text-lg font-bold text-white">{selected.subject}</h3>
+                        <span className={cn(
+                          'rounded-full px-2.5 py-0.5 text-xs font-medium',
+                          selected.status === 'open'
+                            ? 'bg-yellow-500/10 text-yellow-500'
+                            : 'bg-green-500/10 text-green-500'
+                        )}>
+                          {selected.status === 'open' ? 'Open' : 'Replied'}
+                        </span>
+                      </div>
+                      <p className="text-sm text-luxury-gray">{selected.name} &lt;{selected.email}&gt;</p>
+                    </div>
+                    <span className="shrink-0 text-xs text-luxury-gray">{formatDate(selected.createdAt)}</span>
                   </div>
-                  <span className="text-xs text-luxury-gray">{formatDate(selected.createdAt)}</span>
+                  <div className="mb-4 h-px bg-glass-light" />
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-white">{selected.message}</p>
+
+                  {/* Replies */}
+                  {selected.replies.length > 0 && (
+                    <div className="mt-6 space-y-4">
+                      <div className="h-px bg-glass-light" />
+                      <p className="flex items-center gap-2 text-xs font-medium text-luxury-gray">
+                        <HiReply size={14} />
+                        Replies ({selected.replies.length})
+                      </p>
+                      {selected.replies.map((reply) => (
+                        <div key={reply._id} className="rounded-lg border border-glass-light/50 bg-luxury-black/30 p-4">
+                          <div className="mb-1 flex items-center justify-between">
+                            <span className="text-sm font-medium text-gold-500">
+                              {reply.repliedBy?.name || 'Staff'}
+                            </span>
+                            <span className="text-xs text-luxury-gray">{formatDate(reply.createdAt)}</span>
+                          </div>
+                          <p className="whitespace-pre-wrap text-sm text-white">{reply.message}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div className="mb-4 h-px bg-glass-light" />
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-white">{selected.message}</p>
-                <div className="mt-6 flex items-center gap-2 text-xs text-luxury-gray">
-                  <HiCheck size={14} />
-                  {selected.read ? 'Read' : 'Unread'}
+
+                {/* Reply Form */}
+                <div className="mt-auto border-t border-glass-light p-4">
+                  <div className="flex gap-3">
+                    <textarea
+                      value={replyMessage}
+                      onChange={(e) => setReplyMessage(e.target.value)}
+                      placeholder="Type your reply..."
+                      rows={2}
+                      className="flex-1 resize-none rounded-xl border border-glass-light bg-luxury-black/50 px-4 py-2.5 text-sm text-white placeholder-luxury-gray outline-none transition-all focus:border-gold-500 focus:ring-1 focus:ring-gold-500"
+                    />
+                    <button
+                      onClick={handleReply}
+                      disabled={!replyMessage.trim() || sending}
+                      className="flex items-center gap-2 self-end rounded-xl bg-gold-500 px-5 py-2.5 text-sm font-bold text-luxury-black transition-all hover:bg-gold-400 disabled:opacity-50"
+                    >
+                      {sending ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-luxury-black border-t-transparent" />
+                      ) : (
+                        <HiPaperAirplane size={16} className="rotate-90" />
+                      )}
+                      Send
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
