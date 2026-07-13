@@ -3,10 +3,11 @@ import Navbar from '@components/navbar/Navbar';
 import Footer from '@components/layout/Footer';
 import PageTransition from '@components/ui/PageTransition';
 import GlassCard from '@components/ui/GlassCard';
-import { HiCalendar, HiCreditCard, HiChartBar, HiBell, HiUser } from 'react-icons/hi';
+import { HiCalendar, HiCreditCard, HiChartBar, HiBell, HiUser, HiMail, HiChevronDown, HiChevronUp } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
 import api from '@services/api';
+import { formatDate } from '@utils/helpers';
 
 function SkeletonCard() {
   return (
@@ -43,6 +44,8 @@ export default function Dashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [contactMessages, setContactMessages] = useState<any[]>([]);
+  const [expandedMsg, setExpandedMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -57,9 +60,10 @@ export default function Dashboard() {
         api.get('/bookings/my'),
         api.get('/payments'),
         api.get('/notifications'),
+        api.get('/contact/my'),
       ]);
 
-      const [userResult, bookingsResult, paymentsResult, notifResult] = results;
+      const [userResult, bookingsResult, paymentsResult, notifResult, contactResult] = results;
 
       if (userResult.status === 'fulfilled') {
         setUser(userResult.value.data.data || userResult.value.data);
@@ -78,18 +82,24 @@ export default function Dashboard() {
         setUnreadCount(notifs.filter((n: any) => !n.read).length);
       }
 
+      if (contactResult.status === 'fulfilled') {
+        setContactMessages(contactResult.value.data.data || []);
+      }
+
       setLoading(false);
     };
     fetchData();
   }, []);
 
   const upcomingBookings = bookings.filter((b) => b.status !== 'cancelled' && b.status !== 'completed');
+  const repliedCount = contactMessages.filter((m) => m.status === 'replied').length;
   const stats = user
     ? [
         { label: 'Membership', value: user.membership?.name || 'Active', icon: HiCreditCard },
         { label: 'Next Booking', value: upcomingBookings.length > 0 ? `${upcomingBookings[0].date}, ${upcomingBookings[0].time}` : 'No upcoming bookings', icon: HiCalendar },
         { label: 'Payments', value: `${payments.length} total`, icon: HiChartBar },
         { label: 'Notifications', value: `${unreadCount} Unread`, icon: HiBell },
+        ...(contactMessages.length > 0 ? [{ label: 'Inbox', value: `${repliedCount} Reply${repliedCount !== 1 ? 's' : ''}`, icon: HiMail }] : []),
       ]
     : [];
 
@@ -215,6 +225,51 @@ export default function Dashboard() {
                     </div>
                   </GlassCard>
                 </div>
+
+                {contactMessages.length > 0 && (
+                  <GlassCard className="mt-8 p-8">
+                    <h2 className="mb-6 text-xl font-bold text-white">My Messages</h2>
+                    <div className="space-y-3">
+                      {contactMessages.map((msg: any) => (
+                        <div key={msg._id}>
+                          <button
+                            onClick={() => setExpandedMsg(expandedMsg === msg._id ? null : msg._id)}
+                            className="flex w-full items-center justify-between rounded-xl bg-luxury-dark p-4 text-left transition-all hover:bg-luxury-charcoal"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <p className="font-semibold text-white">{msg.subject}</p>
+                              <p className="mt-0.5 text-sm text-luxury-gray">{formatDate(msg.createdAt)}</p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className={`rounded-full px-3 py-1 text-xs font-medium ${
+                                msg.status === 'replied'
+                                  ? 'bg-green-500/10 text-green-500'
+                                  : 'bg-luxury-charcoal text-luxury-gray'
+                              }`}>
+                                {msg.status === 'replied' ? 'Replied' : 'Sent'}
+                              </span>
+                              {expandedMsg === msg._id ? <HiChevronUp className="text-luxury-gray" /> : <HiChevronDown className="text-luxury-gray" />}
+                            </div>
+                          </button>
+                          {expandedMsg === msg._id && (
+                            <div className="space-y-3 border-l-2 border-gold-500/30 pl-4 ml-2 mt-3">
+                              <div className="rounded-lg bg-luxury-dark/50 p-3">
+                                <p className="mb-1 text-xs font-medium text-luxury-gray">Your message</p>
+                                <p className="whitespace-pre-wrap text-sm text-white">{msg.message}</p>
+                              </div>
+                              {msg.replies?.map((reply: any) => (
+                                <div key={reply._id} className="rounded-lg border border-glass-light/30 bg-gold-500/5 p-3">
+                                  <p className="mb-1 text-xs font-medium text-gold-500">{reply.repliedBy?.name || 'Staff'} replied</p>
+                                  <p className="whitespace-pre-wrap text-sm text-white">{reply.message}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </GlassCard>
+                )}
               </>
             )}
           </div>

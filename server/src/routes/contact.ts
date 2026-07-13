@@ -34,6 +34,15 @@ router.get('/', protect, authorize('admin', 'trainer'), asyncHandler(async (_req
   }
 }));
 
+router.get('/my', protect, asyncHandler(async (req: AuthRequest, res) => {
+  try {
+    const messages = await Contact.find({ email: req.user!.email }).sort('-createdAt').populate('replies.repliedBy', 'name');
+    res.json({ success: true, count: messages.length, data: messages });
+  } catch {
+    res.status(500).json({ success: false, message: 'Failed to fetch your messages' });
+  }
+}));
+
 router.put('/:id/read', protect, authorize('admin', 'trainer'), asyncHandler(async (req, res) => {
   try {
     const message = await Contact.findByIdAndUpdate(req.params.id, { read: true }, { new: true });
