@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import ErrorBoundary from '@components/ui/ErrorBoundary';
 import LoadingScreen from '@components/ui/LoadingScreen';
 import ScrollToTop from '@components/ui/ScrollToTop';
 import PageTransition from '@components/ui/PageTransition';
@@ -58,6 +59,7 @@ const TrainerDashboard = lazy(() => import('@pages/TrainerDashboard'));
 
 export default function App() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     setNavigate(navigate);
@@ -67,70 +69,74 @@ export default function App() {
     <>
       <LoadingScreen />
       <ScrollToTop />
-      <AnimatePresence mode="wait">
-        <Suspense fallback={
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-black">
-            <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
-          </div>
-        }>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/programs" element={<Programs />} />
-            <Route path="/programs/:slug" element={<ProgramDetail />} />
-            <Route path="/trainers" element={<Trainers />} />
-            <Route path="/trainers/:id" element={<TrainerDetail />} />
-            <Route path="/membership" element={<Membership />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/bmi" element={<BMI />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogDetail />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
-            <Route path="/trainer/dashboard" element={<TrainerRoute><TrainerDashboard /></TrainerRoute>} />
-            <Route path="/trainer/contacts" element={<TrainerRoute><PageTransition><div className="noise-bg" /><Navbar /><main className="min-h-screen pt-32"><div className="relative mx-auto max-w-7xl px-6 py-16"><AdminContacts /></div></main><Footer /></PageTransition></TrainerRoute>} />
-            <Route path="/trainer/pending" element={<TrainerPending />} />
-            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
+      <ErrorBoundary>
+        <AnimatePresence mode="wait">
+          <motion.div key={location.pathname}>
+            <Suspense fallback={
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-black">
+                <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
+              </div>
+            }>
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/programs" element={<Programs />} />
+                <Route path="/programs/:slug" element={<ProgramDetail />} />
+                <Route path="/trainers" element={<Trainers />} />
+                <Route path="/trainers/:id" element={<TrainerDetail />} />
+                <Route path="/membership" element={<Membership />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/bmi" element={<BMI />} />
+                <Route path="/gallery" element={<Gallery />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogDetail />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route path="/careers" element={<Careers />} />
+                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+                <Route path="/trainer/dashboard" element={<TrainerRoute><TrainerDashboard /></TrainerRoute>} />
+                <Route path="/trainer/contacts" element={<TrainerRoute><PageTransition><div className="noise-bg" /><Navbar /><main className="min-h-screen pt-32"><div className="relative mx-auto max-w-7xl px-6 py-16"><AdminContacts /></div></main><Footer /></PageTransition></TrainerRoute>} />
+                <Route path="/trainer/pending" element={<TrainerPending />} />
+                <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
 
-            <Route
-              path="/admin"
-              element={
-                <AdminRoute>
-                  <AdminLayout />
-                </AdminRoute>
-              }
-            >
-              <Route index element={<AdminDashboard />} />
-              <Route path="blog" element={<AdminBlog />} />
-              <Route path="programs" element={<AdminPrograms />} />
-              <Route path="trainers" element={<AdminTrainers />} />
-              <Route path="memberships" element={<AdminMemberships />} />
-              <Route path="payments" element={<AdminPayments />} />
-              <Route path="gallery" element={<AdminGallery />} />
-              <Route path="products" element={<AdminProducts />} />
-              <Route path="faq" element={<AdminFAQ />} />
-              <Route path="contacts" element={<AdminContacts />} />
-              <Route path="bookings" element={<AdminBookings />} />
-              <Route path="enrollments" element={<AdminEnrollments />} />
-              <Route path="users" element={<AdminUsers />} />
-              <Route path="trainer-requests" element={<AdminTrainerRequests />} />
-            </Route>
+                <Route
+                  path="/admin"
+                  element={
+                    <AdminRoute>
+                      <AdminLayout />
+                    </AdminRoute>
+                  }
+                >
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="blog" element={<AdminBlog />} />
+                  <Route path="programs" element={<AdminPrograms />} />
+                  <Route path="trainers" element={<AdminTrainers />} />
+                  <Route path="memberships" element={<AdminMemberships />} />
+                  <Route path="payments" element={<AdminPayments />} />
+                  <Route path="gallery" element={<AdminGallery />} />
+                  <Route path="products" element={<AdminProducts />} />
+                  <Route path="faq" element={<AdminFAQ />} />
+                  <Route path="contacts" element={<AdminContacts />} />
+                  <Route path="bookings" element={<AdminBookings />} />
+                  <Route path="enrollments" element={<AdminEnrollments />} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="trainer-requests" element={<AdminTrainerRequests />} />
+                </Route>
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </AnimatePresence>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </motion.div>
+        </AnimatePresence>
+      </ErrorBoundary>
     </>
   );
 }
