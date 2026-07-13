@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HiMenu, HiX, HiUser, HiLogout, HiShieldCheck, HiViewGrid, HiSwitchHorizontal } from 'react-icons/hi';
+import { HiMenu, HiX, HiUser, HiLogout, HiShieldCheck, HiViewGrid, HiSwitchHorizontal, HiMail } from 'react-icons/hi';
 import { cn } from '@utils/cn';
 import { useAuth } from '@context/AuthContext';
 
@@ -98,6 +98,13 @@ export default function Navbar() {
               >
                 <HiViewGrid size={16} />
                 Dashboard
+              </Link>
+              <Link
+                to="/messages"
+                className="flex items-center gap-1.5 rounded-full border border-glass-light px-4 py-2 text-sm font-medium text-luxury-gray transition-all hover:border-gold-500/30 hover:text-white"
+              >
+                <HiMail size={16} />
+                Messages
               </Link>
               <div className="relative flex items-center gap-2 border-l border-glass-light pl-3" ref={accountMenuRef}>
                 <button

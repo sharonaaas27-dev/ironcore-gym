@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HiCalendar, HiUserGroup, HiClock, HiCheck, HiX, HiUserAdd, HiPhotograph, HiSave, HiUsers, HiMail } from 'react-icons/hi';
+import { HiCalendar, HiUserGroup, HiClock, HiCheck, HiX, HiUserAdd, HiPhotograph, HiSave, HiUsers, HiMail, HiCollection, HiStar, HiPlus, HiChevronDown } from 'react-icons/hi';
 import Navbar from '@components/navbar/Navbar';
 import Footer from '@components/layout/Footer';
 import PageTransition from '@components/ui/PageTransition';
@@ -30,6 +30,7 @@ export default function TrainerDashboard() {
   const [clients, setClients] = useState<TrainerRequest[]>([]);
   const [clientsLoading, setClientsLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [assignModalClient, setAssignModalClient] = useState<any>(null);
 
   const [profile, setProfile] = useState<any>(null);
   const [profileLoading, setProfileLoading] = useState(false);
@@ -304,34 +305,25 @@ export default function TrainerDashboard() {
             )}
 
             {activeTab === 'clients' && (
-              <GlassCard className="p-8">
-                <h2 className="mb-6 text-xl font-bold text-white">My Clients</h2>
-                {clientsLoading ? (
-                  <p className="text-luxury-gray">Loading clients...</p>
-                ) : clients.length === 0 ? (
-                  <div className="flex flex-col items-center py-12">
-                    <HiUsers className="text-luxury-gray/30" size={48} />
-                    <p className="mt-4 text-luxury-gray">No clients yet.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {clients.map((c) => (
-                      <div key={c._id} className="flex items-center justify-between rounded-xl bg-luxury-dark p-4">
-                        <div className="flex items-center gap-4">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-500/20 text-sm font-bold text-gold-500">
-                            {c.user?.name?.charAt(0)?.toUpperCase() || '?'}
-                          </div>
-                          <div>
-                            <p className="font-semibold text-white">{c.user?.name}</p>
-                            <p className="text-sm text-luxury-gray">{c.user?.email}</p>
-                          </div>
-                        </div>
-                        <span className="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-500">Active</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </GlassCard>
+              <div className="space-y-6">
+                <GlassCard className="p-8">
+                  <h2 className="mb-6 text-xl font-bold text-white">My Clients</h2>
+                  {clientsLoading ? (
+                    <p className="text-luxury-gray">Loading clients...</p>
+                  ) : clients.length === 0 ? (
+                    <div className="flex flex-col items-center py-12">
+                      <HiUsers className="text-luxury-gray/30" size={48} />
+                      <p className="mt-4 text-luxury-gray">No clients yet.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {clients.map((c) => (
+                        <ClientCard key={c._id} client={c} onAssign={() => setAssignModalClient(c)} />
+                      ))}
+                    </div>
+                  )}
+                </GlassCard>
+              </div>
             )}
 
             {activeTab === 'profile' && (
@@ -407,6 +399,190 @@ export default function TrainerDashboard() {
         </section>
       </main>
       <Footer />
+      {assignModalClient && (
+        <AssignProgramModal
+          client={assignModalClient}
+          onClose={() => setAssignModalClient(null)}
+          onAssigned={() => setAssignModalClient(null)}
+        />
+      )}
     </PageTransition>
+  );
+}
+
+function ClientCard({ client, onAssign }: { client: any; onAssign: () => void }) {
+  const [programs, setPrograms] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [advancing, setAdvancing] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (expanded) {
+      setLoading(true);
+      api.get(`/progress/client/${client.user._id}`)
+        .then((res) => setPrograms(res.data.data))
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }
+  }, [expanded, client.user._id]);
+
+  const handleAdvance = async (progId: string) => {
+    setAdvancing(progId);
+    try {
+      const res = await api.put(`/progress/${progId}/advance`);
+      setPrograms((prev) => prev.map((p) => p._id === progId ? res.data.data : p));
+    } catch (err: any) {
+      alert(err?.response?.data?.message || 'Failed to advance stage');
+    } finally {
+      setAdvancing(null);
+    }
+  };
+
+  return (
+    <div className="rounded-xl border border-glass-light bg-luxury-dark transition-all">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="flex w-full items-center justify-between p-4 text-left"
+      >
+        <div className="flex items-center gap-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-500/20 text-sm font-bold text-gold-500">
+            {client.user?.name?.charAt(0)?.toUpperCase() || '?'}
+          </div>
+          <div>
+            <p className="font-semibold text-white">{client.user?.name}</p>
+            <p className="text-sm text-luxury-gray">{client.user?.email}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-500">Active</span>
+          <HiChevronDown className={`text-luxury-gray transition-transform ${expanded ? 'rotate-180' : ''}`} size={18} />
+        </div>
+      </button>
+      {expanded && (
+        <div className="border-t border-glass-light/50 p-4">
+          {loading ? (
+            <p className="text-sm text-luxury-gray">Loading programs...</p>
+          ) : programs.length === 0 ? (
+            <p className="text-sm text-luxury-gray">No programs assigned yet.</p>
+          ) : (
+            <div className="space-y-3 mb-4">
+              {programs.map((up: any) => {
+                const total = up.stages?.length || 1;
+                const completed = up.stages?.filter((s: any) => s.status === 'completed').length || 0;
+                const pct = Math.round((completed / total) * 100);
+                const stageName = up.program?.stages?.[up.currentStageIndex]?.title || `Stage ${up.currentStageIndex + 1}`;
+                return (
+                  <div key={up._id} className="rounded-lg bg-luxury-charcoal/50 p-3">
+                    <div className="mb-1 flex items-center justify-between">
+                      <span className="text-sm font-medium text-white">{up.program?.title}</span>
+                      <span className="text-xs text-gold-500">{pct}%</span>
+                    </div>
+                    <div className="mb-2 h-1.5 w-full overflow-hidden rounded-full bg-luxury-dark">
+                      <div className="h-full rounded-full bg-gold-500" style={{ width: `${pct}%` }} />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-luxury-gray">{stageName} ({completed}/{total})</span>
+                      {up.status !== 'completed' && (
+                        <button
+                          onClick={() => handleAdvance(up._id)}
+                          disabled={advancing === up._id}
+                          className="flex items-center gap-1 rounded-lg bg-gold-500/10 px-2.5 py-1 text-xs font-medium text-gold-500 hover:bg-gold-500/20 disabled:opacity-50"
+                        >
+                          {advancing === up._id ? '...' : <><HiStar size={12} /> Advance</>}
+                        </button>
+                      )}
+                      {up.status === 'completed' && (
+                        <span className="text-xs font-medium text-green-500">Completed</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <div className="flex gap-2">
+            <button
+              onClick={() => window.open(`/messages?user=${client.user._id}`, '_self')}
+              className="flex items-center gap-1.5 rounded-lg border border-glass-light px-3 py-2 text-xs font-medium text-luxury-gray hover:border-gold-500/30 hover:text-gold-500"
+            >
+              <HiMail size={14} /> Message
+            </button>
+            <button
+              onClick={onAssign}
+              className="flex items-center gap-1.5 rounded-lg border border-glass-light px-3 py-2 text-xs font-medium text-luxury-gray hover:border-gold-500/30 hover:text-gold-500"
+            >
+              <HiPlus size={14} /> Assign Program
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AssignProgramModal({ client, onClose, onAssigned }: { client: any; onClose: () => void; onAssigned: () => void }) {
+  const [programs, setPrograms] = useState<any[]>([]);
+  const [selectedId, setSelectedId] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.get('/programs')
+      .then((res) => setPrograms(res.data.data))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleAssign = async () => {
+    if (!selectedId) return;
+    setSaving(true);
+    try {
+      await api.post('/progress', { userId: client.user._id, programId: selectedId });
+      onAssigned();
+    } catch (err: any) {
+      alert(err?.response?.data?.message || 'Failed to assign program');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-md rounded-2xl border border-glass-light bg-luxury-charcoal p-6 shadow-2xl">
+        <h3 className="mb-4 text-lg font-bold text-white">Assign Program to {client.user?.name}</h3>
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
+          </div>
+        ) : (
+          <div className="max-h-64 space-y-2 overflow-y-auto">
+            {programs.map((p) => (
+              <button
+                key={p._id}
+                onClick={() => setSelectedId(p._id)}
+                className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all ${
+                  selectedId === p._id
+                    ? 'border-gold-500 bg-gold-500/10'
+                    : 'border-glass-light bg-luxury-dark hover:border-gold-500/30'
+                }`}
+              >
+                {p.image && <img src={p.image} alt="" className="h-12 w-12 rounded-lg object-cover" />}
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-white">{p.title}</p>
+                  <p className="text-xs text-luxury-gray">{p.duration} • {(p as any).stages?.length || 0} stages</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="mt-6 flex gap-3">
+          <button onClick={onClose} className="flex-1 rounded-xl border border-glass-light py-3 text-sm font-medium text-luxury-gray hover:bg-glass-light hover:text-white">Cancel</button>
+          <button onClick={handleAssign} disabled={!selectedId || saving} className="flex-1 rounded-xl bg-gold-500 py-3 text-sm font-bold text-luxury-black hover:bg-gold-400 disabled:opacity-50">
+            {saving ? 'Assigning...' : 'Assign Program'}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

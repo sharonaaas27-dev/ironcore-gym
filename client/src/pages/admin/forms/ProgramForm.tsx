@@ -9,6 +9,13 @@ import ImageUpload from '@components/admin/ImageUpload';
 import { slugify } from '@utils/helpers';
 import type { Program } from '@/types';
 
+const stageSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  order: z.coerce.number().int().min(0),
+  duration: z.string().min(1),
+});
+
 const schema = z.object({
   title: z.string().min(2),
   slug: z.string().min(2),
@@ -20,6 +27,7 @@ const schema = z.object({
   price: z.coerce.number().min(0),
   image: z.string().optional().or(z.literal('')),
   benefits: z.array(z.object({ value: z.string().min(1) })),
+  stages: z.array(stageSchema),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -49,6 +57,7 @@ export default function ProgramForm({ program, onClose, onSaved }: ProgramFormPr
       price: program.price,
       image: program.image || '',
       benefits: program.benefits?.map((b) => ({ value: b })) || [{ value: '' }],
+      stages: (program as any).stages?.map((s: any) => ({ title: s.title, description: s.description, order: s.order, duration: s.duration })) || [],
     } : {
       title: '',
       slug: '',
@@ -60,10 +69,12 @@ export default function ProgramForm({ program, onClose, onSaved }: ProgramFormPr
       price: 0,
       image: '',
       benefits: [{ value: '' }],
+      stages: [],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({ control, name: 'benefits' });
+  const { fields: benefitFields, append: appendBenefit, remove: removeBenefit } = useFieldArray({ control, name: 'benefits' });
+  const { fields: stageFields, append: appendStage, remove: removeStage } = useFieldArray({ control, name: 'stages' });
   const title = watch('title');
 
   useEffect(() => {
@@ -82,6 +93,7 @@ export default function ProgramForm({ program, onClose, onSaved }: ProgramFormPr
       const payload: Record<string, unknown> = {
         ...data,
         benefits: data.benefits.map((b) => b.value),
+        stages: data.stages.map((s, i) => ({ ...s, order: i })),
       };
       if (imageFile) {
         const formData = new FormData();
@@ -137,14 +149,36 @@ export default function ProgramForm({ program, onClose, onSaved }: ProgramFormPr
           </FormField>
           <div>
             <label className="mb-2 block text-sm font-medium text-luxury-gray">Benefits</label>
-            {fields.map((field, i) => (
+            {benefitFields.map((field, i) => (
               <div key={field.id} className="mb-2 flex items-center gap-2">
                 <input {...register(`benefits.${i}.value`)} placeholder="Enter a benefit" className={inputClass} />
-                <button type="button" onClick={() => remove(i)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-red-500 hover:bg-red-500/10"><HiTrash size={16} /></button>
+                <button type="button" onClick={() => removeBenefit(i)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-red-500 hover:bg-red-500/10"><HiTrash size={16} /></button>
               </div>
             ))}
-            <button type="button" onClick={() => append({ value: '' })} className="flex items-center gap-2 text-sm text-gold-500 hover:text-gold-400"><HiPlus size={16} /> Add Benefit</button>
+            <button type="button" onClick={() => appendBenefit({ value: '' })} className="flex items-center gap-2 text-sm text-gold-500 hover:text-gold-400"><HiPlus size={16} /> Add Benefit</button>
           </div>
+
+          {/* Stages */}
+          <div>
+            <label className="mb-2 block text-sm font-medium text-luxury-gray">Program Stages</label>
+            <p className="mb-3 text-xs text-luxury-gray">Define the progressive stages. Stages unlock sequentially as users progress.</p>
+            {stageFields.map((field, i) => (
+              <div key={field.id} className="mb-3 rounded-xl border border-glass-light bg-luxury-black/30 p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-xs font-medium text-gold-500">Stage {i + 1}</span>
+                  <button type="button" onClick={() => removeStage(i)} className="text-red-500 hover:text-red-400"><HiTrash size={16} /></button>
+                </div>
+                <div className="grid gap-3 md:grid-cols-3">
+                  <input {...register(`stages.${i}.title`)} placeholder="Stage title" className={inputClass} />
+                  <input {...register(`stages.${i}.duration`)} placeholder="e.g. 2 weeks" className={inputClass} />
+                  <input type="hidden" {...register(`stages.${i}.order`)} value={i} />
+                </div>
+                <textarea {...register(`stages.${i}.description`)} placeholder="What the user achieves in this stage" rows={2} className={`mt-2 ${textareaClass}`} />
+              </div>
+            ))}
+            <button type="button" onClick={() => appendStage({ title: '', description: '', order: stageFields.length, duration: '' })} className="flex items-center gap-2 text-sm text-gold-500 hover:text-gold-400"><HiPlus size={16} /> Add Stage</button>
+          </div>
+
           <div className="flex justify-end gap-3 pt-4">
             <button type="button" onClick={onClose} className="rounded-xl border border-glass-light px-6 py-3 text-sm font-medium text-luxury-gray transition-all hover:bg-glass-light hover:text-white">Cancel</button>
             <button type="submit" disabled={saving} className="rounded-xl bg-gold-500 px-6 py-3 text-sm font-bold text-luxury-black transition-all hover:bg-gold-400 disabled:opacity-50">

@@ -1,5 +1,12 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+export interface IProgramStage {
+  title: string;
+  description: string;
+  order: number;
+  duration: string;
+}
+
 export interface IProgram extends Document {
   title: string;
   slug: string;
@@ -14,9 +21,20 @@ export interface IProgram extends Document {
   trainer: mongoose.Types.ObjectId;
   schedule: { day: string; time: string; trainer: string }[];
   benefits: string[];
+  stages: IProgramStage[];
   enrolledCount: number;
   createdAt: Date;
 }
+
+const stageSchema = new Schema<IProgramStage>(
+  {
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    order: { type: Number, required: true },
+    duration: { type: String, required: true },
+  },
+  { _id: false }
+);
 
 const programSchema = new Schema<IProgram>(
   {
@@ -33,6 +51,7 @@ const programSchema = new Schema<IProgram>(
     trainer: { type: Schema.Types.ObjectId, ref: 'Trainer' },
     schedule: [{ day: String, time: String, trainer: String }],
     benefits: [{ type: String }],
+    stages: [stageSchema],
     enrolledCount: { type: Number, default: 0 },
   },
   { timestamps: true }

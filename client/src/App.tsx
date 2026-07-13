@@ -39,6 +39,7 @@ const ForgotPassword = lazy(() => import('@pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('@pages/ResetPassword'));
 const Careers = lazy(() => import('@pages/Careers'));
 const TrainerPending = lazy(() => import('@pages/TrainerPending'));
+const Messages = lazy(() => import('@pages/Messages'));
 
 const AdminBlog = lazy(() => import('@pages/admin/AdminBlog'));
 const AdminPrograms = lazy(() => import('@pages/admin/AdminPrograms'));
@@ -94,6 +95,7 @@ export default function App() {
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
             <Route path="/trainer/dashboard" element={<TrainerRoute><TrainerDashboard /></TrainerRoute>} />
             <Route path="/trainer/contacts" element={<TrainerRoute><PageTransition><div className="noise-bg" /><Navbar /><main className="min-h-screen pt-32"><div className="relative mx-auto max-w-7xl px-6 py-16"><AdminContacts /></div></main><Footer /></PageTransition></TrainerRoute>} />
             <Route path="/trainer/pending" element={<TrainerPending />} />

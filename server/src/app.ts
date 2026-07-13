@@ -24,6 +24,8 @@ import newsletterRoutes from './routes/newsletter';
 import productRoutes from './routes/products';
 import notificationRoutes from './routes/notifications';
 import trainerRequestRoutes from './routes/trainerRequests';
+import messageRoutes from './routes/messages';
+import progressRoutes from './routes/progress';
 import adminRoutes from './routes/admin';
 
 const app = express();
@@ -122,6 +124,8 @@ app.use('/api/newsletter', newsletterLimiter);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/progress', progressRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (_req, res) => {

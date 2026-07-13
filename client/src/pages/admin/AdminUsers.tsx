@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { HiShieldCheck, HiUser, HiStar, HiPencil, HiTrash, HiX } from 'react-icons/hi';
+import { HiShieldCheck, HiUser, HiStar, HiPencil, HiTrash, HiX, HiMail } from 'react-icons/hi';
 import { cn } from '@utils/cn';
 import api from '@services/api';
 import DataTable, { type Column } from '@components/admin/DataTable';
@@ -102,6 +102,13 @@ export default function AdminUsers() {
           title="Edit user"
         >
           <HiPencil size={16} />
+        </button>
+        <button
+          onClick={() => window.open(`/messages?user=${u._id}`, '_self')}
+          className="rounded-lg p-2 text-luxury-gray transition-all hover:bg-blue-500/10 hover:text-blue-500"
+          title="Send message"
+        >
+          <HiMail size={16} />
         </button>
         <button
           onClick={() => setDeletingId(u._id)}

@@ -6,7 +6,7 @@ import Footer from '@components/layout/Footer';
 import PageTransition from '@components/ui/PageTransition';
 import GlassCard from '@components/ui/GlassCard';
 import { FaInstagram, FaLinkedinIn, FaStar } from 'react-icons/fa';
-import { HiUserAdd, HiCheck, HiX } from 'react-icons/hi';
+import { HiUserAdd, HiCheck, HiX, HiMail } from 'react-icons/hi';
 import { useAuth } from '@context/AuthContext';
 import api from '@services/api';
 
@@ -115,6 +115,14 @@ export default function TrainerDetail() {
                     </div>
                     <div className="mt-8 flex flex-wrap gap-3">
                       <Link to="/contact" className="rounded-xl bg-gold-500 px-8 py-3.5 font-bold text-luxury-black transition-all hover:bg-gold-400">Book Session</Link>
+                      {user && (
+                        <Link
+                          to={`/messages?user=${trainer.userId || ''}`}
+                          className="flex items-center gap-2 rounded-xl border border-gold-500 px-6 py-3.5 text-sm font-semibold text-gold-500 transition-all hover:bg-gold-500/10"
+                        >
+                          <HiMail size={18} /> Message
+                        </Link>
+                      )}
                       {user && user.role === 'user' && (
                         requestStatus === 'none' ? (
                           <button onClick={handleRequestTrainer} disabled={requesting}

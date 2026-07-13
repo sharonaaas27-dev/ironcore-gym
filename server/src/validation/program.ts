@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+const stageSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  order: z.number().int().min(0),
+  duration: z.string().min(1),
+});
+
 export const createProgramSchema = z.object({
   title: z.string().min(2),
   slug: z.string().min(2),
@@ -12,6 +19,7 @@ export const createProgramSchema = z.object({
   intensity: z.enum(['beginner', 'intermediate', 'advanced']),
   price: z.number().min(0),
   benefits: z.array(z.string()).optional(),
+  stages: z.array(stageSchema).optional(),
   trainer: z.string().optional().nullable(),
   schedule: z.array(z.object({
     day: z.string(),

@@ -3,7 +3,7 @@ import Navbar from '@components/navbar/Navbar';
 import Footer from '@components/layout/Footer';
 import PageTransition from '@components/ui/PageTransition';
 import GlassCard from '@components/ui/GlassCard';
-import { HiCalendar, HiCreditCard, HiChartBar, HiBell, HiUser, HiMail, HiChevronDown, HiChevronUp } from 'react-icons/hi';
+import { HiCalendar, HiCreditCard, HiChartBar, HiBell, HiUser, HiMail, HiChevronDown, HiChevronUp, HiCollection } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
 import api from '@services/api';
@@ -46,6 +46,8 @@ export default function Dashboard() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [contactMessages, setContactMessages] = useState<any[]>([]);
   const [expandedMsg, setExpandedMsg] = useState<string | null>(null);
+  const [msgUnreadCount, setMsgUnreadCount] = useState(0);
+  const [userPrograms, setUserPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -61,9 +63,11 @@ export default function Dashboard() {
         api.get('/payments'),
         api.get('/notifications'),
         api.get('/contact/my'),
+        api.get('/messages/unread-count'),
+        api.get('/progress/my'),
       ]);
 
-      const [userResult, bookingsResult, paymentsResult, notifResult, contactResult] = results;
+      const [userResult, bookingsResult, paymentsResult, notifResult, contactResult, msgResult, progResult] = results;
 
       if (userResult.status === 'fulfilled') {
         setUser(userResult.value.data.data || userResult.value.data);
@@ -86,6 +90,14 @@ export default function Dashboard() {
         setContactMessages(contactResult.value.data.data || []);
       }
 
+      if (msgResult.status === 'fulfilled') {
+        setMsgUnreadCount(msgResult.value.data.count || 0);
+      }
+
+      if (progResult.status === 'fulfilled') {
+        setUserPrograms(progResult.value.data.data || []);
+      }
+
       setLoading(false);
     };
     fetchData();
@@ -100,6 +112,8 @@ export default function Dashboard() {
         { label: 'Payments', value: `${payments.length} total`, icon: HiChartBar },
         { label: 'Notifications', value: `${unreadCount} Unread`, icon: HiBell },
         ...(contactMessages.length > 0 ? [{ label: 'Inbox', value: `${repliedCount} Reply${repliedCount !== 1 ? 's' : ''}`, icon: HiMail }] : []),
+        { label: 'Messages', value: `${msgUnreadCount} Unread`, icon: HiMail },
+        { label: 'Programs', value: `${userPrograms.length} Active`, icon: HiCollection },
       ]
     : [];
 
@@ -267,6 +281,40 @@ export default function Dashboard() {
                           )}
                         </div>
                       ))}
+                    </div>
+                  </GlassCard>
+                )}
+
+                {userPrograms.length > 0 && (
+                  <GlassCard className="mt-8 p-8">
+                    <div className="mb-6 flex items-center justify-between">
+                      <h2 className="text-xl font-bold text-white">My Programs</h2>
+                      <Link to="/messages" className="text-sm text-gold-500 hover:text-gold-400">Message Trainer</Link>
+                    </div>
+                    <div className="space-y-6">
+                      {userPrograms.map((up: any) => {
+                        const totalStages = up.stages?.length || 1;
+                        const completedStages = up.stages?.filter((s: any) => s.status === 'completed').length || 0;
+                        const progress = Math.round((completedStages / totalStages) * 100);
+                        const stageName = up.program?.stages?.[up.currentStageIndex]?.title || `Stage ${up.currentStageIndex + 1}`;
+                        return (
+                          <div key={up._id}>
+                            <div className="mb-2 flex items-center justify-between">
+                              <div>
+                                <p className="font-semibold text-white">{up.program?.title || 'Program'}</p>
+                                <p className="text-sm text-luxury-gray">{stageName} — {completedStages}/{totalStages} stages</p>
+                              </div>
+                              <span className="text-sm font-bold text-gold-500">{progress}%</span>
+                            </div>
+                            <div className="h-2 w-full overflow-hidden rounded-full bg-luxury-dark">
+                              <div
+                                className="h-full rounded-full bg-gold-500 transition-all duration-500"
+                                style={{ width: `${progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </GlassCard>
                 )}
