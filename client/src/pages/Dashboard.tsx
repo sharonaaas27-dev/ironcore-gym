@@ -5,10 +5,41 @@ import PageTransition from '@components/ui/PageTransition';
 import GlassCard from '@components/ui/GlassCard';
 import { HiCalendar, HiCreditCard, HiChartBar, HiBell, HiUser } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@context/AuthContext';
 import api from '@services/api';
 
+function SkeletonCard() {
+  return (
+    <GlassCard hover={false} className="p-6">
+      <div className="flex animate-pulse items-center gap-4">
+        <div className="h-12 w-12 rounded-xl bg-luxury-dark" />
+        <div className="space-y-2">
+          <div className="h-3 w-20 rounded bg-luxury-dark" />
+          <div className="h-5 w-28 rounded bg-luxury-dark" />
+        </div>
+      </div>
+    </GlassCard>
+  );
+}
+
+function SkeletonRow() {
+  return (
+    <div className="flex animate-pulse items-center justify-between rounded-xl bg-luxury-dark p-4">
+      <div className="flex items-center gap-4">
+        <div className="h-10 w-10 rounded-full bg-luxury-charcoal" />
+        <div className="space-y-2">
+          <div className="h-4 w-32 rounded bg-luxury-charcoal" />
+          <div className="h-3 w-24 rounded bg-luxury-charcoal" />
+        </div>
+      </div>
+      <div className="h-6 w-20 rounded-full bg-luxury-charcoal" />
+    </div>
+  );
+}
+
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
+  const { user: authUser } = useAuth();
+  const [user, setUser] = useState<any>(authUser || null);
   const [bookings, setBookings] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -32,8 +63,6 @@ export default function Dashboard() {
 
       if (userResult.status === 'fulfilled') {
         setUser(userResult.value.data.data || userResult.value.data);
-      } else {
-        setError(true);
       }
 
       if (bookingsResult.status === 'fulfilled') {
@@ -72,13 +101,36 @@ export default function Dashboard() {
         <section className="relative min-h-screen py-32">
           <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
           <div className="relative mx-auto max-w-7xl px-6">
+            <h1 className="mb-2 text-3xl font-bold text-white">Welcome back, {user?.name || authUser?.name || 'Athlete'}</h1>
             {loading ? (
-              <p className="text-luxury-gray">Loading...</p>
+              <div className="space-y-10">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
+                <div className="grid gap-8 lg:grid-cols-2">
+                  <GlassCard className="p-8">
+                    <div className="mb-6 h-6 w-48 animate-pulse rounded bg-luxury-dark" />
+                    <div className="space-y-4">
+                      <SkeletonRow />
+                      <SkeletonRow />
+                    </div>
+                  </GlassCard>
+                  <GlassCard className="p-8">
+                    <div className="mb-6 h-6 w-40 animate-pulse rounded bg-luxury-dark" />
+                    <div className="space-y-4">
+                      <SkeletonRow />
+                      <SkeletonRow />
+                    </div>
+                  </GlassCard>
+                </div>
+              </div>
             ) : error ? (
               <p className="text-red-400">Failed to load dashboard data.</p>
             ) : (
               <>
-                <h1 className="mb-2 text-3xl font-bold text-white">Welcome back, {user?.name || 'Athlete'}</h1>
                 <p className="mb-10 text-luxury-gray">Here's your fitness overview.</p>
 
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

@@ -25,6 +25,7 @@ export default function Login() {
   const { login, googleLogin, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const googleBtnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,12 +47,14 @@ export default function Login() {
       window.google.accounts.id.initialize({
         client_id: googleClientId,
         callback: async (response) => {
+          setIsLoggingIn(true);
           try {
             const googleUser = await googleLogin({ credential: response.credential });
             if (googleUser.role === 'admin') navigate('/admin');
             else if (googleUser.role === 'trainer') navigate('/trainer/dashboard');
             else navigate('/dashboard');
           } catch (err: any) {
+            setIsLoggingIn(false);
             setError(err?.response?.data?.message || err?.message || 'Google login failed. Check that the backend is running.');
           }
         },
@@ -65,12 +68,14 @@ export default function Login() {
   }, [googleLogin, navigate, googleClientId]);
 
   const handleLogin = async (data: { email: string; password: string; remember?: boolean }) => {
+    setIsLoggingIn(true);
     try {
       const user = await login(data.email, data.password, data.remember);
       if (user.role === 'admin') navigate('/admin');
       else if (user.role === 'trainer') navigate('/trainer/dashboard');
       else navigate('/dashboard');
     } catch (err: any) {
+      setIsLoggingIn(false);
       if (err?.response?.status === 403) {
         navigate('/trainer/pending');
         return;
@@ -82,6 +87,12 @@ export default function Login() {
   return (
     <PageTransition>
       <div className="noise-bg" />
+      {isLoggingIn && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-luxury-black/90 backdrop-blur-sm">
+          <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
+          <p className="mt-4 text-sm tracking-widest text-gold-500 uppercase">Signing in...</p>
+        </div>
+      )}
       <Navbar />
       <main className="flex min-h-screen items-center justify-center pt-24">
         <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
