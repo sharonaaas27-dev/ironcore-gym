@@ -249,7 +249,7 @@ export default function Register() {
                       onClick={() => window.google?.accounts.id.prompt()}
                       className="flex w-full items-center justify-center rounded-full border-2 border-gold-500 bg-black px-5 py-3 transition-all hover:bg-gold-500/10"
                     >
-                      <span className="text-base font-bold text-white">G</span>
+                      <span className="text-base font-bold" style={{ color: '#FBBC05' }}>G</span>
                     </button>
                   </>
                 )}
