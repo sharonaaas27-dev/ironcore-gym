@@ -9,3 +9,6 @@ uploads/*
 *.err
 *.tsbuildinfo
 .qodo/
+
+.vercel
+.env*
