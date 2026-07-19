@@ -25,7 +25,7 @@ mongoose
   .then(() => {
     console.log('Connected to MongoDB');
     httpServer.listen(config.port, () => {
-      console.log(`IRONCORE API running on port ${config.port}`);
+      console.log(`Ash2 Fitness API running on port ${config.port}`);
     });
   })
   .catch((error) => {

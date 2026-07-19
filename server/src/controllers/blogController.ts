@@ -32,7 +32,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
 
   const file = (req as any).file as Express.Multer.File | undefined;
   if (file) {
-    const result = await uploadImage(file.path, 'ironcore-gym/blog');
+    const result = await uploadImage(file.path, 'ash2-fitness/blog');
     parsed.data.image = result.url;
   }
 
@@ -84,6 +84,6 @@ export const uploadBlogImage = async (req: Request, res: Response) => {
   if (!file) {
     return res.status(400).json({ success: false, message: 'No image file provided' });
   }
-  const result = await uploadImage(file.path, 'ironcore-gym/blog');
+  const result = await uploadImage(file.path, 'ash2-fitness/blog');
   res.json({ success: true, data: { url: result.url, publicId: result.publicId } });
 };

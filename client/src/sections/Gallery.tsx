@@ -5,6 +5,15 @@ import SectionHeading from '@components/ui/SectionHeading';
 import { cn } from '@utils/cn';
 import api from '@services/api';
 
+const placeholderImages = [
+  { _id: 'd1', src: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80', alt: 'Gym Floor', size: 'large' },
+  { _id: 'd2', src: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&q=80', alt: 'Weight Training', size: 'small' },
+  { _id: 'd3', src: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=400&q=80', alt: 'CrossFit Zone', size: 'small' },
+  { _id: 'd4', src: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80', alt: 'Cardio Area', size: 'large' },
+  { _id: 'd5', src: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&q=80', alt: 'Boxing Ring', size: 'medium' },
+  { _id: 'd6', src: 'https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=400&q=80', alt: 'Yoga Studio', size: 'medium' },
+];
+
 const sizePattern = ['large', 'small', 'small', 'large', 'medium', 'medium'];
 
 export default function Gallery() {
@@ -18,15 +27,19 @@ export default function Gallery() {
         setLoading(true);
         const response = await api.get('/gallery');
         const data = response.data.data;
-        const mapped = data.map((item: any, i: number) => ({
-          _id: item._id,
-          src: item.image,
-          alt: item.title,
-          size: sizePattern[i % sizePattern.length],
-        }));
-        setImages(mapped);
+        if (data && data.length > 0) {
+          const mapped = data.map((item: any, i: number) => ({
+            _id: item._id,
+            src: item.image,
+            alt: item.title,
+            size: sizePattern[i % sizePattern.length],
+          }));
+          setImages(mapped);
+        } else {
+          setImages(placeholderImages);
+        }
       } catch (err) {
-        console.error('Failed to fetch gallery:', err);
+        setImages(placeholderImages);
       } finally {
         setLoading(false);
       }
@@ -82,6 +95,9 @@ export default function Gallery() {
             ))}
           </div>
         )}
+        <p className="mt-8 text-center text-xs text-luxury-gray/60">
+          Demo images used for presentation purposes.
+        </p>
       </div>
     </section>
   );

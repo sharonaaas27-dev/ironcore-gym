@@ -42,7 +42,7 @@ router.post('/', protect, authorize('admin'), upload.array('images', 5), asyncHa
     const files = (req as any).files as Express.Multer.File[] | undefined;
     if (files && files.length > 0) {
       const uploadedUrls = await Promise.all(
-        files.map((file) => uploadImage(file.path, 'ironcore-gym/products').then((r) => r.url))
+        files.map((file) => uploadImage(file.path, 'ash2-fitness/products').then((r) => r.url))
       );
       parsed.data.images = uploadedUrls;
     }

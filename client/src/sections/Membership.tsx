@@ -10,6 +10,12 @@ import api from '@services/api';
 export default function Membership() {
   const [yearly, setYearly] = useState(false);
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
+  const samplePlans = [
+    { name: 'Basic', description: 'Essential access for beginners', popular: false, price: { monthly: 999, yearly: 9999 }, features: ['Gym access (6am-10pm)', 'Basic equipment', 'Locker room access', '1 group class/week'] },
+    { name: 'Premium', description: 'Full access with group classes', popular: true, price: { monthly: 1799, yearly: 17999 }, features: ['24/7 gym access', 'All equipment & zones', 'Unlimited group classes', '2 PT sessions/month', 'Sauna access', 'Guest pass (2x/month)'] },
+    { name: 'Elite', description: 'The ultimate VIP experience', popular: false, price: { monthly: 2499, yearly: 24999 }, features: ['24/7 premium access', 'All equipment & zones', 'Locker room, sauna & steam', 'Unlimited classes & workshops', '4 PT sessions/month', 'Custom nutrition plan', 'Unlimited guest passes', 'Priority booking'] },
+  ];
+
   const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,29 +27,33 @@ export default function Membership() {
         setError(null);
         const res = await api.get('/memberships');
         const data = res.data.data;
-        const grouped: Record<string, any> = {};
-        data.forEach((item: any) => {
-          const key = item.type;
-          if (!grouped[key]) {
-            grouped[key] = {
-              name: item.name,
-              description: item.description,
-              popular: item.popular || false,
-              price: { monthly: 0, yearly: 0 },
-              features: [],
-            };
-          }
-          if (item.duration === 'monthly') {
-            grouped[key].price.monthly = item.price;
-            grouped[key].price.yearly = Math.round(item.price * 12 * 0.85);
-            grouped[key].features = item.features
-              .filter((f: any) => f.included)
-              .map((f: any) => f.name);
-          }
-        });
-        setPlans(Object.values(grouped));
+        if (data && data.length > 0) {
+          const grouped: Record<string, any> = {};
+          data.forEach((item: any) => {
+            const key = item.type;
+            if (!grouped[key]) {
+              grouped[key] = {
+                name: item.name,
+                description: item.description,
+                popular: item.popular || false,
+                price: { monthly: 0, yearly: 0 },
+                features: [],
+              };
+            }
+            if (item.duration === 'monthly') {
+              grouped[key].price.monthly = item.price;
+              grouped[key].price.yearly = Math.round(item.price * 12 * 0.85);
+              grouped[key].features = item.features
+                .filter((f: any) => f.included)
+                .map((f: any) => f.name);
+            }
+          });
+          setPlans(Object.values(grouped));
+        } else {
+          setPlans(samplePlans);
+        }
       } catch (err) {
-        setError('Failed to load membership plans. Please try again.');
+        setPlans(samplePlans);
       } finally {
         setLoading(false);
       }
@@ -134,7 +144,7 @@ export default function Membership() {
 
                 <div className="mt-6 flex items-baseline gap-1">
                   <span className="text-5xl font-bold text-white">
-                    ${yearly ? plan.price.yearly : plan.price.monthly}
+                    ₹{yearly ? plan.price.yearly.toLocaleString() : plan.price.monthly.toLocaleString()}
                   </span>
                   <span className="text-sm text-luxury-gray">
                     /{yearly ? 'year' : 'month'}
@@ -165,6 +175,9 @@ export default function Membership() {
             ))}
           </div>
         )}
+        <p className="mt-10 text-center text-xs text-luxury-gray/60">
+          Sample plans for demonstration. Final pricing will be customized by the gym.
+        </p>
       </div>
     </section>
   );

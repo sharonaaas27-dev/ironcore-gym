@@ -51,7 +51,7 @@ export default function FAQ() {
               <h1 className="text-display-sm md:text-display-md font-bold">
                 Frequently Asked <span className="gradient-text">Questions</span>
               </h1>
-              <p className="mt-4 text-lg text-luxury-gray">Everything you need to know about IRONCORE.</p>
+              <p className="mt-4 text-lg text-luxury-gray">Everything you need to know about Ash2 Fitness.</p>
             </div>
 
             {loading && (

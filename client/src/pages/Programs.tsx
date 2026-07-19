@@ -7,10 +7,18 @@ import Footer from '@components/layout/Footer';
 import PageTransition from '@components/ui/PageTransition';
 import SectionHeading from '@components/ui/SectionHeading';
 
+const samplePrograms = [
+  { slug: 'strength-training', title: 'Strength Training', description: 'Build raw power with progressive overload and compound movements. Expert coaching for all levels.', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80', intensity: 'intermediate', duration: '60 min', price: '1,499' },
+  { slug: 'crossfit', title: 'CrossFit', description: 'High-intensity functional movements combining weightlifting, gymnastics, and cardio for total fitness.', image: 'https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=600&q=80', intensity: 'intermediate', duration: '45 min', price: '1,299' },
+  { slug: 'yoga-flexibility', title: 'Yoga & Flexibility', description: 'Enhance flexibility, balance, and inner peace with guided sessions for all skill levels.', image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80', intensity: 'beginner', duration: '60 min', price: '999' },
+  { slug: 'hiit-training', title: 'HIIT Training', description: 'Maximum results in minimum time with intense intervals designed to maximize calorie burn.', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80', intensity: 'advanced', duration: '30 min', price: '1,199' },
+  { slug: 'weight-loss', title: 'Weight Loss', description: 'Structured programs combining cardio, strength, and nutrition guidance for sustainable results.', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80', intensity: 'beginner', duration: '45 min', price: '1,499' },
+  { slug: 'boxing-mma', title: 'Boxing & MMA', description: 'Combat sports training for fitness, skill, and conditioning. Learn techniques from experienced coaches.', image: 'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=600&q=80', intensity: 'intermediate', duration: '60 min', price: '1,399' },
+];
+
 export default function Programs() {
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -19,11 +27,16 @@ export default function Programs() {
   useEffect(() => {
     api.get('/programs')
       .then((res) => {
-        setPrograms(res.data.data);
+        const data = res.data.data;
+        if (data && data.length > 0) {
+          setPrograms(data);
+        } else {
+          setPrograms(samplePrograms);
+        }
         setLoading(false);
       })
-      .catch((err) => {
-        setError(err?.response?.data?.message || 'Failed to load programs');
+      .catch(() => {
+        setPrograms(samplePrograms);
         setLoading(false);
       });
   }, []);
@@ -46,46 +59,6 @@ export default function Programs() {
     );
   }
 
-  if (error) {
-    return (
-      <PageTransition>
-        <div className="noise-bg" />
-        <Navbar />
-        <main className="pt-32">
-          <section className="relative py-32">
-            <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
-            <div className="relative mx-auto max-w-7xl px-6 flex items-center justify-center min-h-[50vh]">
-              <div className="text-center">
-                <p className="text-red-400 text-lg">{error}</p>
-              </div>
-            </div>
-          </section>
-        </main>
-        <Footer />
-      </PageTransition>
-    );
-  }
-
-  if (programs.length === 0) {
-    return (
-      <PageTransition>
-        <div className="noise-bg" />
-        <Navbar />
-        <main className="pt-32">
-          <section className="relative py-32">
-            <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
-            <div className="relative mx-auto max-w-7xl px-6 flex items-center justify-center min-h-[50vh]">
-              <div className="text-center">
-                <p className="text-luxury-gray text-lg">No programs available at this time.</p>
-              </div>
-            </div>
-          </section>
-        </main>
-        <Footer />
-      </PageTransition>
-    );
-  }
-
   return (
     <PageTransition>
       <div className="noise-bg" />
@@ -96,7 +69,7 @@ export default function Programs() {
           <div className="relative mx-auto max-w-7xl px-6">
             <SectionHeading
               title="Our $Programs"
-              subtitle="Comprehensive training programs designed for every fitness level and goal."
+              subtitle="Sample programs shown for demonstration. Actual programs will be customized by the gym."
             />
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {programs.map((program, i) => (
@@ -120,7 +93,7 @@ export default function Programs() {
                       <h3 className="text-xl font-bold text-white group-hover:text-gold-500 transition-colors">{program.title}</h3>
                       <p className="mt-2 text-sm text-luxury-gray">{program.description}</p>
                       <div className="mt-4 flex items-center justify-between">
-                        <span className="text-lg font-bold text-gold-500">${program.price}<span className="text-xs text-luxury-gray">/mo</span></span>
+                        <span className="text-lg font-bold text-gold-500">₹{program.price}<span className="text-xs text-luxury-gray">/mo</span></span>
                         <span className="text-sm font-semibold text-white group-hover:translate-x-1 transition-transform">Learn More →</span>
                       </div>
                     </div>
@@ -128,6 +101,9 @@ export default function Programs() {
                 </Link>
               ))}
             </div>
+            <p className="mt-10 text-center text-xs text-luxury-gray/60">
+              Sample programs for demonstration. Final lineup will be customized by the gym.
+            </p>
           </div>
         </section>
       </main>

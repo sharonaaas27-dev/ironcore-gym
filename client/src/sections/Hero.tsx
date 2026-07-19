@@ -107,20 +107,20 @@ export default function Hero() {
               transition={{ duration: 0.6 }}
               className="mb-4 text-sm font-semibold tracking-[0.3em] text-gold-500 uppercase"
             >
-              Premium Fitness Experience
+              CrossFit & Fitness Training
             </motion.p>
 
             <h1
               ref={textRef}
               className="text-display-md md:text-display-lg lg:text-display-xl font-bold tracking-tighter"
             >
-              {'FORGE YOUR'.split('').map((char, i) => (
+              {'TRAIN WITH'.split('').map((char, i) => (
                 <span key={i} className="char inline-block">
                   {char === ' ' ? '\u00A0' : char}
                 </span>
               ))}
               <br />
-              {'IRON BODY'.split('').map((char, i) => (
+              {'PURPOSE'.split('').map((char, i) => (
                 <span key={i} className="char inline-block gradient-text">
                   {char === ' ' ? '\u00A0' : char}
                 </span>
@@ -131,9 +131,9 @@ export default function Hero() {
               ref={subtitleRef}
               className="mt-6 max-w-xl text-lg leading-relaxed text-luxury-gray"
             >
-              Transform your limits into power. World-class equipment, expert
-              trainers, and a community that pushes you beyond what you thought
-              possible.
+              Transform your limits into power. Well-maintained equipment,
+              expert CrossFit trainers, and a supportive community that pushes
+              you beyond what you thought possible.
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
@@ -178,10 +178,10 @@ export default function Hero() {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <div className="text-8xl font-black tracking-tighter text-white/5">
-                  IRON
+                  ASH2
                 </div>
                 <div className="-mt-4 text-8xl font-black tracking-tighter text-gold-500/10">
-                  CORE
+                  FITNESS
                 </div>
               </div>
             </div>

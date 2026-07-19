@@ -133,7 +133,7 @@ router.put('/trainer-requests/:id/approve', asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar || '',
-      bio: application?.bio || 'Trainer at IRONCORE Gym',
+      bio: application?.bio || 'Trainer at Ash2 Fitness',
       experience: application?.experience || 0,
       specialties: application?.specialties || [],
       phone: application?.phone || user.phone,

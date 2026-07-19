@@ -1,4 +1,4 @@
-# IRONCORE Gym
+# Ash2 Fitness
 
 Premium gym & fitness center web application built with React, TypeScript, Node.js, and MongoDB.
 

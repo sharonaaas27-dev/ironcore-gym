@@ -22,7 +22,7 @@ export default function Privacy() {
               <h3 className="text-white font-bold">3. Data Protection</h3>
               <p>We implement industry-standard security measures to protect your personal information against unauthorized access.</p>
               <h3 className="text-white font-bold">4. Contact</h3>
-              <p>For privacy-related inquiries, contact us at privacy@ironcore-gym.com</p>
+              <p>For privacy-related inquiries, contact us at info@ash2fitness.com</p>
             </div>
           </GlassCard>
         </div>

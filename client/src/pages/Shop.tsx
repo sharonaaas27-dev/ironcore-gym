@@ -46,8 +46,8 @@ export default function Shop() {
           <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="mb-16 text-center">
-              <h1 className="text-display-sm md:text-display-md font-bold">IRONCORE <span className="gradient-text">Shop</span></h1>
-              <p className="mt-4 text-lg text-luxury-gray">Premium gear for premium athletes.</p>
+              <h1 className="text-display-sm md:text-display-md font-bold">Ash2 Fitness <span className="gradient-text">Shop</span></h1>
+              <p className="mt-4 text-lg text-luxury-gray">Gear up for your fitness journey.</p>
             </div>
 
             {loading && (

@@ -6,20 +6,33 @@ import { useScrollAnimation } from '@hooks/useScrollAnimation';
 import SectionHeading from '@components/ui/SectionHeading';
 import GlassCard from '@components/ui/GlassCard';
 
+const samplePrograms = [
+  { slug: 'strength-training', title: 'Strength Training', description: 'Build raw power with progressive overload and compound movements. Expert coaching for all levels.', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80', intensity: 'intermediate', duration: '60 min' },
+  { slug: 'crossfit', title: 'CrossFit', description: 'High-intensity functional movements combining weightlifting, gymnastics, and cardio for total fitness.', image: 'https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=600&q=80', intensity: 'intermediate', duration: '45 min' },
+  { slug: 'yoga-flexibility', title: 'Yoga & Flexibility', description: 'Enhance flexibility, balance, and inner peace with guided sessions for all skill levels.', image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80', intensity: 'beginner', duration: '60 min' },
+  { slug: 'hiit-training', title: 'HIIT Training', description: 'Maximum results in minimum time with intense intervals designed to maximize calorie burn.', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80', intensity: 'advanced', duration: '30 min' },
+  { slug: 'weight-loss', title: 'Weight Loss', description: 'Structured programs combining cardio, strength, and nutrition guidance for sustainable results.', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80', intensity: 'beginner', duration: '45 min' },
+  { slug: 'boxing-mma', title: 'Boxing & MMA', description: 'Combat sports training for fitness, skill, and conditioning. Learn techniques from experienced coaches.', image: 'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=600&q=80', intensity: 'intermediate', duration: '60 min' },
+];
+
 export default function Programs() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     api.get('/programs')
       .then((res) => {
-        setPrograms(res.data.data);
+        const data = res.data.data;
+        if (data && data.length > 0) {
+          setPrograms(data);
+        } else {
+          setPrograms(samplePrograms);
+        }
         setLoading(false);
       })
-      .catch((err) => {
-        setError(err?.response?.data?.message || 'Failed to load programs');
+      .catch(() => {
+        setPrograms(samplePrograms);
         setLoading(false);
       });
   }, []);
@@ -35,32 +48,6 @@ export default function Programs() {
     );
   }
 
-  if (error) {
-    return (
-      <section ref={ref} id="programs" className="relative py-32">
-        <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
-        <div className="relative mx-auto max-w-7xl px-6 flex items-center justify-center min-h-[50vh]">
-          <div className="text-center">
-            <p className="text-red-400 text-lg">{error}</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (programs.length === 0) {
-    return (
-      <section ref={ref} id="programs" className="relative py-32">
-        <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
-        <div className="relative mx-auto max-w-7xl px-6 flex items-center justify-center min-h-[50vh]">
-          <div className="text-center">
-            <p className="text-luxury-gray text-lg">No programs available at this time.</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section ref={ref} id="programs" className="relative py-32">
       <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
@@ -68,7 +55,7 @@ export default function Programs() {
       <div className="relative mx-auto max-w-7xl px-6">
         <SectionHeading
           title="Our $Programs"
-          subtitle="From strength to flexibility, we offer everything you need to achieve your fitness goals."
+          subtitle="Sample programs shown for demonstration. Actual programs will be customized by the gym."
         />
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -113,6 +100,9 @@ export default function Programs() {
             </Link>
           ))}
         </div>
+        <p className="mt-10 text-center text-xs text-luxury-gray/60">
+          Sample programs for demonstration. Final lineup will be customized by the gym.
+        </p>
       </div>
     </section>
   );

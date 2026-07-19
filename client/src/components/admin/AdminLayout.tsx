@@ -59,9 +59,9 @@ export default function AdminLayout() {
       >
         <div className="flex h-16 items-center gap-3 border-b border-glass-light px-6">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold-500 text-sm font-bold text-luxury-black">
-            I
+            A
           </div>
-          <span className="text-lg font-bold text-white">IRONCORE</span>
+          <span className="text-lg font-bold text-white">Ash2 Fitness</span>
           <span className="rounded bg-gold-500/20 px-2 py-0.5 text-xs font-medium text-gold-500">Admin</span>
         </div>
 

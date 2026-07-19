@@ -129,7 +129,7 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (_req, res) => {
-  res.json({ success: true, message: 'IRONCORE API is running', timestamp: new Date().toISOString() });
+  res.json({ success: true, message: 'Ash2 Fitness API is running', timestamp: new Date().toISOString() });
 });
 
 app.get('/api/debug-config', (_req, res) => {

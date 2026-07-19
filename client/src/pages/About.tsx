@@ -17,7 +17,7 @@ const fallbackStats = [
 ];
 
 const timeline = [
-  { year: '2010', event: 'IRONCORE Founded' },
+  { year: '2010', event: 'Ash2 Fitness Founded' },
   { year: '2013', event: 'Expansion to 10,000 sq ft' },
   { year: '2016', event: 'Launched Premium Training Programs' },
   { year: '2018', event: 'Opened Second Location' },
@@ -71,8 +71,8 @@ export default function About() {
           <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
           <div className="relative mx-auto max-w-7xl px-6">
             <SectionHeading
-              title="About $IRONCORE"
-              subtitle="Since 2010, we've been committed to transforming lives through premium fitness, expert guidance, and an unmatched training environment."
+              title="About $Ash2 Fitness"
+              subtitle="Since 2010, we've been committed to transforming lives through expert CrossFit training, well-maintained equipment, and a supportive community."
             />
             <div className="grid gap-8 md:grid-cols-4">
               {stats.map((stat) => (
@@ -90,15 +90,15 @@ export default function About() {
             <SectionHeading title="Our $Story" subtitle="A journey of passion, dedication, and the relentless pursuit of excellence." />
             <div className="glass mx-auto max-w-3xl rounded-2xl p-8 md:p-12">
               <p className="text-lg leading-relaxed text-luxury-gray">
-                IRONCORE was born from a simple belief: everyone deserves access to
-                world-class fitness training. What started as a small garage gym has
-                grown into a premier fitness destination, serving thousands of
-                members and producing champions across multiple disciplines.
+                Ash2 Fitness was born from a simple belief: everyone deserves access to
+                quality fitness training. With well-maintained equipment and expert
+                CrossFit coaching, we help our members achieve their goals in a
+                supportive and positive environment.
               </p>
               <p className="mt-6 text-lg leading-relaxed text-luxury-gray">
-                Our team of elite trainers, state-of-the-art equipment, and
-                unwavering commitment to excellence make IRONCORE the ultimate
-                destination for anyone serious about their fitness journey.
+                Our team of knowledgeable trainers, personalized training
+                programs, and unwavering commitment to excellence make Ash2 Fitness
+                the ultimate destination for anyone serious about their fitness journey.
               </p>
             </div>
           </div>

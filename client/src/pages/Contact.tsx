@@ -110,7 +110,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="font-bold text-white">Visit Us</h3>
-                      <p className="mt-1 text-sm text-luxury-gray">123 Fitness Avenue<br />Downtown City, ST 12345</p>
+                      <p className="mt-1 text-sm text-luxury-gray">Thadathilkulam<br />Kanjiramkulam, Kerala 695524</p>
                     </div>
                   </div>
                 </GlassCard>
@@ -122,7 +122,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="font-bold text-white">Call Us</h3>
-                      <p className="mt-1 text-sm text-luxury-gray">+1 (555) 123-4567<br />Mon-Sat: 6AM - 10PM</p>
+                      <p className="mt-1 text-sm text-luxury-gray">+91 98461 51551<br />Mon-Sat: 5:30AM - 10PM</p>
                     </div>
                   </div>
                 </GlassCard>
@@ -134,7 +134,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="font-bold text-white">Email Us</h3>
-                      <p className="mt-1 text-sm text-luxury-gray">hello@ironcore-gym.com<br />support@ironcore-gym.com</p>
+                      <p className="mt-1 text-sm text-luxury-gray">info@ash2fitness.com</p>
                     </div>
                   </div>
                 </GlassCard>
@@ -158,7 +158,7 @@ export default function Contact() {
 
             <div className="mt-12 h-[400px] overflow-hidden rounded-2xl">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m8!1m3!1d387193.305935303!2d-74.259865!3d40.697149!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York!5e0!3m2!1sen!2sus!4v1"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.447!2d77.123!3d8.456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05b8!2sKanjiramkulam!5e0!3m2!1sen!2sin!4v1"
                 width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"
                 className="filter invert-[100%] hue-rotate-[180deg] saturate-0 opacity-80"
               />

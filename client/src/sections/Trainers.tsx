@@ -8,6 +8,13 @@ import api from '@services/api';
 
 export default function Trainers() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
+  const placeholderTrainers = [
+    { id: 'demo-1', name: 'Rahul Sharma', role: 'Certified Strength Coach', image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&q=80', specialties: ['Strength Training', 'Powerlifting'], experience: '8 years', social: { instagram: '#', linkedin: '#' } },
+    { id: 'demo-2', name: 'Priya Patel', role: 'CrossFit & HIIT Specialist', image: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=400&q=80', specialties: ['CrossFit', 'HIIT', 'Functional Training'], experience: '6 years', social: { instagram: '#', linkedin: '#' } },
+    { id: 'demo-3', name: 'Arun Kumar', role: 'Yoga & Flexibility Expert', image: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=400&q=80', specialties: ['Yoga', 'Pilates', 'Mobility'], experience: '10 years', social: { instagram: '#', linkedin: '#' } },
+    { id: 'demo-4', name: 'Ananya Singh', role: 'Nutrition & Wellness Coach', image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&q=80', specialties: ['Nutrition', 'Weight Loss', 'Wellness'], experience: '7 years', social: { instagram: '#', linkedin: '#' } },
+  ];
+
   const [trainers, setTrainers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -18,20 +25,24 @@ export default function Trainers() {
       .then((res) => {
         if (!mounted) return;
         const data = res.data?.data ?? [];
-        setTrainers(data.map((t: any) => ({
-          id: t._id,
-          name: t.name,
-          role: t.bio || t.specialties?.[0] || 'Trainer',
-          image: t.avatar,
-          specialties: t.specialties,
-          experience: t.experience + ' years',
-          social: {
-            instagram: t.socialLinks?.instagram || '#',
-            linkedin: t.socialLinks?.linkedin || '#',
-          },
-        })));
+        if (data.length > 0) {
+          setTrainers(data.map((t: any) => ({
+            id: t._id,
+            name: t.name,
+            role: t.bio || t.specialties?.[0] || 'Trainer',
+            image: t.avatar,
+            specialties: t.specialties,
+            experience: t.experience + ' years',
+            social: {
+              instagram: t.socialLinks?.instagram || '#',
+              linkedin: t.socialLinks?.linkedin || '#',
+            },
+          })));
+        } else {
+          setTrainers(placeholderTrainers);
+        }
       })
-      .catch(() => { if (mounted) setError('Failed to load trainers'); })
+      .catch(() => { if (mounted) setTrainers(placeholderTrainers); })
       .finally(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };
   }, []);
@@ -43,7 +54,7 @@ export default function Trainers() {
       <div className="relative mx-auto max-w-7xl px-6">
         <SectionHeading
           title="Meet Our $Trainers"
-          subtitle="World-class coaches dedicated to your transformation. Each trainer brings years of experience and proven results."
+          subtitle="Trainer profiles shown for demonstration. Information will be updated by the gym."
         />
 
         {loading && (

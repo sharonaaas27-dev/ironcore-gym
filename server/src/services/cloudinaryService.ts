@@ -7,7 +7,7 @@ cloudinary.config({
   api_secret: config.cloudinary.apiSecret,
 });
 
-export async function uploadImage(filePath: string, folder = 'ironcore-gym') {
+export async function uploadImage(filePath: string, folder = 'ash2-fitness') {
   const result = await cloudinary.uploader.upload(filePath, {
     folder,
     resource_type: 'image',
@@ -20,7 +20,7 @@ export async function uploadImage(filePath: string, folder = 'ironcore-gym') {
   };
 }
 
-export async function uploadVideo(filePath: string, folder = 'ironcore-gym') {
+export async function uploadVideo(filePath: string, folder = 'ash2-fitness') {
   const result = await cloudinary.uploader.upload(filePath, {
     folder,
     resource_type: 'video',

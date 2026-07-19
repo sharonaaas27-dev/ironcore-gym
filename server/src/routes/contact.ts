@@ -82,7 +82,7 @@ router.post('/:id/reply', protect, authorize('admin', 'trainer'), asyncHandler(a
         subject: `Re: ${contact.subject}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #d4a017;">IRONCORE Gym</h2>
+            <h2 style="color: #d4a017;">Ash2 Fitness</h2>
             <p>Dear ${contact.name},</p>
             <p>${req.user!.name} has replied to your message:</p>
             <div style="margin: 20px 0; padding: 20px; background: #f5f5f5; border-radius: 8px;">

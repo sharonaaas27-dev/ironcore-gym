@@ -1,7 +1,7 @@
 {
-  "name": "ironcore-gym-server",
+  "name": "ash2-fitness-server",
   "version": "1.0.0",
-  "description": "IRONCORE Gym Backend API",
+  "description": "Ash2 Fitness Backend API",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",

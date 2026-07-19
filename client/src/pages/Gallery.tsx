@@ -6,6 +6,20 @@ import PageTransition from '@components/ui/PageTransition';
 import { cn } from '@utils/cn';
 import api from '@services/api';
 
+const placeholderImages = [
+  { _id: 'd1', src: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80', alt: 'Gym Floor', category: 'Facility' },
+  { _id: 'd2', src: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=600&q=80', alt: 'Weight Training', category: 'Training' },
+  { _id: 'd3', src: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=600&q=80', alt: 'CrossFit Zone', category: 'Training' },
+  { _id: 'd4', src: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80', alt: 'Boxing Ring', category: 'Training' },
+  { _id: 'd5', src: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80', alt: 'Cardio Area', category: 'Facility' },
+  { _id: 'd6', src: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&q=80', alt: 'Personal Training', category: 'Training' },
+  { _id: 'd7', src: 'https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=600&q=80', alt: 'Yoga Studio', category: 'Events' },
+  { _id: 'd8', src: 'https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=600&q=80', alt: 'Locker Room', category: 'Facility' },
+  { _id: 'd9', src: 'https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=600&q=80', alt: 'Group Class', category: 'Events' },
+];
+
+const placeholderCategories = ['All', 'Facility', 'Training', 'Events'];
+
 export default function Gallery() {
   const [images, setImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,17 +36,23 @@ export default function Gallery() {
         setLoading(true);
         const response = await api.get('/gallery');
         const data = response.data.data;
-        const mapped = data.map((item: any) => ({
-          _id: item._id,
-          src: item.image,
-          alt: item.title,
-          category: item.category,
-        }));
-        setImages(mapped);
-        const cats = ['All', ...new Set<string>(data.map((item: any) => item.category))];
-        setCategories(cats);
+        if (data && data.length > 0) {
+          const mapped = data.map((item: any) => ({
+            _id: item._id,
+            src: item.image,
+            alt: item.title,
+            category: item.category,
+          }));
+          setImages(mapped);
+          const cats = ['All', ...new Set<string>(data.map((item: any) => item.category))];
+          setCategories(cats);
+        } else {
+          setImages(placeholderImages);
+          setCategories(placeholderCategories);
+        }
       } catch (err) {
-        console.error('Failed to fetch gallery:', err);
+        setImages(placeholderImages);
+        setCategories(placeholderCategories);
       } finally {
         setLoading(false);
       }
@@ -56,7 +76,7 @@ export default function Gallery() {
               <h1 className="text-display-sm md:text-display-md font-bold">
                 Our <span className="gradient-text">Gallery</span>
               </h1>
-              <p className="mt-4 text-lg text-luxury-gray">Take a visual tour of our premium facility.</p>
+              <p className="mt-4 text-lg text-luxury-gray">Demo images used for presentation purposes.</p>
             </div>
 
             {loading ? (
@@ -108,6 +128,10 @@ export default function Gallery() {
                     </motion.div>
                   ))}
                 </motion.div>
+
+                <p className="mt-10 text-center text-xs text-luxury-gray/60">
+                  Demo images used for presentation purposes.
+                </p>
               </>
             )}
           </div>

@@ -29,7 +29,7 @@ async function seed() {
 
   const admin = await User.create({
     name: 'Admin',
-    email: 'admin@ironcore.com',
+    email: 'admin@ash2fitness.com',
     password: 'admin123',
     role: 'admin',
   });
@@ -43,7 +43,7 @@ async function seed() {
 
   const trainerUser = await User.create({
     name: 'Alexander Stone',
-    email: 'alexander@ironcore.com',
+    email: 'alexander@ash2fitness.com',
     password: 'trainer123',
     role: 'trainer',
     isApproved: true,
@@ -73,9 +73,9 @@ async function seed() {
   ]);
 
   const trainers = await Trainer.create([
-    { name: 'Sofia Martinez', email: 'sofia@ironcore.com', phone: '555-0102', bio: 'CrossFit & HIIT Coach specializing in high-intensity functional training and metabolic conditioning.', avatar: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=400&q=80', specialties: ['CrossFit', 'HIIT', 'Functional Training'], experience: 8, rating: 4.9, socialLinks: { instagram: '#', linkedin: '#' }, available: true },
-    { name: 'Marcus Johnson', email: 'marcus@ironcore.com', phone: '555-0103', bio: 'Yoga & Flexibility Expert with a focus on mobility, pilates, and mind-body connection.', avatar: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=400&q=80', specialties: ['Yoga', 'Pilates', 'Mobility'], experience: 10, rating: 4.8, socialLinks: { instagram: '#', linkedin: '#' }, available: true },
-    { name: 'Emily Chen', email: 'emily@ironcore.com', phone: '555-0104', bio: 'Nutrition & Wellness Coach helping members achieve their goals through science-based nutrition strategies.', avatar: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=400&q=80', specialties: ['Nutrition', 'Weight Loss', 'Wellness'], experience: 7, rating: 4.7, socialLinks: { instagram: '#', linkedin: '#' }, available: true },
+    { name: 'Sofia Martinez', email: 'sofia@ash2fitness.com', phone: '555-0102', bio: 'CrossFit & HIIT Coach specializing in high-intensity functional training and metabolic conditioning.', avatar: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=400&q=80', specialties: ['CrossFit', 'HIIT', 'Functional Training'], experience: 8, rating: 4.9, socialLinks: { instagram: '#', linkedin: '#' }, available: true },
+    { name: 'Marcus Johnson', email: 'marcus@ash2fitness.com', phone: '555-0103', bio: 'Yoga & Flexibility Expert with a focus on mobility, pilates, and mind-body connection.', avatar: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=400&q=80', specialties: ['Yoga', 'Pilates', 'Mobility'], experience: 10, rating: 4.8, socialLinks: { instagram: '#', linkedin: '#' }, available: true },
+    { name: 'Emily Chen', email: 'emily@ash2fitness.com', phone: '555-0104', bio: 'Nutrition & Wellness Coach helping members achieve their goals through science-based nutrition strategies.', avatar: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=400&q=80', specialties: ['Nutrition', 'Weight Loss', 'Wellness'], experience: 7, rating: 4.7, socialLinks: { instagram: '#', linkedin: '#' }, available: true },
   ]);
 
   await Program.create([
@@ -113,7 +113,7 @@ async function seed() {
     { title: 'Group Class', image: 'https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=800&q=80', category: 'Events' },
   ]);
 
-  const blogAdmin = await User.create({ name: 'Alexander Stone', email: 'alexander.blog@ironcore.com', password: 'blog123', role: 'user' });
+  const blogAdmin = await User.create({ name: 'Alexander Stone', email: 'alexander.blog@ash2fitness.com', password: 'blog123', role: 'user' });
 
   await Blog.create([
     { title: 'The Science of Progressive Overload', slug: 'progressive-overload', excerpt: 'Understand how progressive overload builds muscle and strength effectively.', content: 'Progressive overload is the foundation of all muscle growth and strength development. In this comprehensive guide, we will explore how to apply this principle effectively.\n\nThe concept is simple: to get stronger and build muscle, you must gradually increase the demands placed on your body. This can be achieved by adding more weight, increasing repetitions, or reducing rest periods.\n\nResearch shows that consistent application of progressive overload leads to significant strength gains over time. The key is tracking your workouts and making small, incremental improvements each session.', author: blogAdmin._id, image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80', category: 'Training', tags: ['strength', 'muscle', 'workout'], readTime: 5, publishedAt: new Date('2026-06-20') },
@@ -125,7 +125,7 @@ async function seed() {
 
   await Product.create([
     { name: 'Premium Gym Tank', slug: 'premium-gym-tank', description: 'High-performance athletic tank top for intense workouts.', price: 49, images: ['https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&q=80'], category: 'Apparel', stock: 50, sizes: ['S', 'M', 'L', 'XL'], colors: ['Black', 'White', 'Gray'], featured: true },
-    { name: 'IRONCORE Hoodie', slug: 'ironcore-hoodie', description: 'Premium quality hoodie for post-workout comfort.', price: 89, images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&q=80'], category: 'Apparel', stock: 30, sizes: ['M', 'L', 'XL'], colors: ['Black', 'Navy'], featured: true },
+    { name: 'Ash2 Fitness Hoodie', slug: 'ash2-fitness-hoodie', description: 'Premium quality hoodie for post-workout comfort.', price: 89, images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&q=80'], category: 'Apparel', stock: 30, sizes: ['M', 'L', 'XL'], colors: ['Black', 'Navy'], featured: true },
     { name: 'Shaker Bottle', slug: 'shaker-bottle', description: 'Premium shaker bottle with mixing ball for protein shakes.', price: 29, images: ['https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80'], category: 'Accessories', stock: 100, featured: false },
     { name: 'Gym Bag', slug: 'gym-bag', description: 'Spacious gym bag with multiple compartments.', price: 69, images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80'], category: 'Accessories', stock: 25, featured: false },
     { name: 'Resistance Bands Set', slug: 'resistance-bands', description: 'Complete set of resistance bands for home and gym workouts.', price: 39, images: ['https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=400&q=80'], category: 'Equipment', stock: 60, featured: false },
@@ -133,15 +133,15 @@ async function seed() {
   ]);
 
   await Testimonial.create([
-    { user: member._id, content: 'IRONCORE completely transformed my life. In just 6 months, I lost 30 pounds and gained confidence I never knew I had. The trainers here are world-class.', rating: 5, transformation: { before: '95kg', after: '75kg' } },
+    { user: member._id, content: 'Ash2 Fitness completely transformed my life. In just 6 months, I lost weight and gained confidence I never knew I had. The trainers here are world-class.', rating: 5, transformation: { before: '95kg', after: '75kg' } },
     { user: member._id, content: 'The best gym I have ever been to. The equipment is top-notch, the atmosphere is incredible, and the community keeps you motivated every single day.', rating: 5, transformation: { before: '78kg', after: '62kg' } },
-    { user: member._id, content: 'After trying multiple gyms, IRONCORE stands out. The personalized attention and scientific approach to training makes all the difference.', rating: 5, transformation: { before: '88kg', after: '76kg' } },
+    { user: member._id, content: 'After trying multiple gyms, Ash2 Fitness stands out. The personalized attention and scientific approach to training makes all the difference.', rating: 5, transformation: { before: '88kg', after: '76kg' } },
   ]);
 
   console.log('Seed data created successfully');
-  console.log(`Admin:   admin@ironcore.com / admin123`);
+  console.log(`Admin:   admin@ash2fitness.com / admin123`);
   console.log(`User:    john@example.com / member123`);
-  console.log(`Trainer: alexander@ironcore.com / trainer123`);
+  console.log(`Trainer: alexander@ash2fitness.com / trainer123`);
   process.exit(0);
 }
 

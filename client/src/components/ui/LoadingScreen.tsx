@@ -34,8 +34,8 @@ export default function LoadingScreen() {
             className="text-center"
           >
             <h1 className="text-6xl font-bold tracking-tighter text-white md:text-8xl">
-              IRON
-              <span className="gradient-text">CORE</span>
+              Ash2
+              <span className="gradient-text">Fitness</span>
             </h1>
             <div className="mt-8 flex items-center gap-4">
               <div className="h-[2px] w-32 bg-luxury-dark">
@@ -49,7 +49,7 @@ export default function LoadingScreen() {
               </span>
             </div>
             <p className="mt-4 text-sm tracking-widest text-luxury-gray uppercase">
-              Forging Strength, Building Legends
+              Train With Purpose
             </p>
           </motion.div>
         </motion.div>

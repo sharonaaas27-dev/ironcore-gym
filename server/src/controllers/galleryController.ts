@@ -21,7 +21,7 @@ export const createGalleryItem = async (req: Request, res: Response) => {
 
   const file = (req as any).file as Express.Multer.File | undefined;
   if (file) {
-    const result = await uploadImage(file.path, 'ironcore-gym/gallery');
+    const result = await uploadImage(file.path, 'ash2-fitness/gallery');
     parsed.data.image = result.url;
   }
 

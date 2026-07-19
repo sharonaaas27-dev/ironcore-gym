@@ -20,7 +20,7 @@ export default function Terms() {
               <h3 className="text-white font-bold">2. Gym Rules</h3>
               <p>Members must follow all gym rules and guidelines. Proper attire and behavior are required at all times.</p>
               <h3 className="text-white font-bold">3. Liability</h3>
-              <p>Members participate in activities at their own risk. IRONCORE is not liable for injuries sustained on premises.</p>
+              <p>Members participate in activities at their own risk. Ash2 Fitness is not liable for injuries sustained on premises.</p>
               <h3 className="text-white font-bold">4. Termination</h3>
               <p>We reserve the right to terminate memberships for violating terms or rules.</p>
             </div>

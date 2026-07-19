@@ -3,18 +3,18 @@ version: '3.8'
 services:
   mongodb:
     image: mongo:7
-    container_name: ironcore-mongodb
+    container_name: ash2-mongodb
     restart: unless-stopped
     ports:
       - '27017:27017'
     volumes:
       - mongodb_data:/data/db
     environment:
-      MONGO_INITDB_DATABASE: ironcore-gym
+      MONGO_INITDB_DATABASE: ash2-fitness
 
   redis:
     image: redis:7-alpine
-    container_name: ironcore-redis
+    container_name: ash2-redis
     restart: unless-stopped
     ports:
       - '6379:6379'
@@ -25,7 +25,7 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: ironcore-server
+    container_name: ash2-server
     restart: unless-stopped
     ports:
       - '5000:5000'
@@ -35,7 +35,7 @@ services:
     env_file:
       - .env
     environment:
-      MONGODB_URI: mongodb://mongodb:27017/ironcore-gym
+      MONGODB_URI: mongodb://mongodb:27017/ash2-fitness
       REDIS_URL: redis://redis:6379
     volumes:
       - ./server/uploads:/app/uploads
@@ -44,7 +44,7 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
-    container_name: ironcore-client
+    container_name: ash2-client
     restart: unless-stopped
     ports:
       - '80:80'

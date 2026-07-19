@@ -36,7 +36,7 @@ export default function About() {
 
       <div className="relative mx-auto max-w-7xl px-6">
         <SectionHeading
-          title="Why $IRONCORE?"
+          title="Why $Ash2 Fitness?"
           subtitle="We don't just build bodies. We forge champions, reshape lives, and create an environment where greatness becomes inevitable."
         />
 

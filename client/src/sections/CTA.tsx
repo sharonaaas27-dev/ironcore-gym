@@ -26,7 +26,7 @@ export default function CTA() {
           </h2>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-luxury-gray leading-relaxed">
-            Join IRONCORE today and start your journey toward a stronger, healthier,
+            Join Ash2 Fitness today and start your journey toward a stronger, healthier,
             and more confident you. Your first session is on us.
           </p>
 

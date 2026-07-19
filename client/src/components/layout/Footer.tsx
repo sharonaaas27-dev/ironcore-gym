@@ -53,11 +53,12 @@ export default function Footer() {
         >
           <div className="lg:col-span-2">
             <h2 className="text-3xl font-bold tracking-tighter">
-              IRON<span className="gradient-text">CORE</span>
+              Ash2<span className="gradient-text">Fitness</span>
             </h2>
             <p className="mt-4 max-w-sm text-luxury-gray leading-relaxed">
-              Premium gym & fitness center dedicated to transforming lives through
-              world-class training, cutting-edge equipment, and expert guidance.
+              CrossFit & fitness center in Kanjiramkulam, Kerala dedicated to
+              transforming lives through expert training, well-maintained
+              equipment, and a supportive community.
             </p>
             <div className="mt-6 flex gap-4">
               {socialLinks.map((social) => (
@@ -135,8 +136,10 @@ export default function Footer() {
           className="border-t border-luxury-dark pt-8 text-center"
         >
           <p className="text-sm text-luxury-gray">
-            &copy; {new Date().getFullYear()} IRONCORE Gym. All rights reserved.
-            Built with strength.
+            &copy; {new Date().getFullYear()} Ash2 Fitness. All rights reserved.
+          </p>
+          <p className="mt-2 text-[10px] text-luxury-gray/40">
+            Demo Concept &mdash; Sample design for presentation. Information shown is for illustrative purposes only.
           </p>
         </motion.div>
       </div>
