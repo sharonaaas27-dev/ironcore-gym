@@ -17,6 +17,7 @@ const samplePrograms = [
 
 export default function Programs() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const [programs, setPrograms] = useState<any[]>(samplePrograms);
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +46,7 @@ export default function Programs() {
           {programs.map((program, i) => (
             <Link key={program.slug} to={`/programs/${program.slug}`}>
               <motion.div
-                initial={{ opacity: 0, y: 60 }}
+                initial={isMobile ? false : { opacity: 0, y: 60 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: i * 0.1, ease: [0.77, 0, 0.18, 1] }}
                 className="group glass rounded-2xl overflow-hidden hover-lift"

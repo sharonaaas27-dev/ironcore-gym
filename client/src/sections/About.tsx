@@ -29,6 +29,7 @@ const features = [
 
 export default function About() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <section ref={ref} id="about" className="relative overflow-hidden py-16 md:py-20 lg:py-32">
@@ -44,7 +45,7 @@ export default function About() {
           {features.map((feature, i) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 60 }}
+              initial={isMobile ? false : { opacity: 0, y: 60 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
               className="group glass rounded-2xl p-8 hover-lift"
@@ -58,7 +59,7 @@ export default function About() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={isMobile ? false : { opacity: 0, y: 40 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-16 text-center"

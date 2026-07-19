@@ -20,6 +20,7 @@ export default function Gallery() {
   const [images, setImages] = useState<any[]>(placeholderImages);
   const [loading, setLoading] = useState(false);
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -59,7 +60,7 @@ export default function Gallery() {
             {images.map((image, i) => (
               <motion.div
                 key={image._id}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={isMobile ? false : { opacity: 0, scale: 0.9 }}
                 animate={isVisible ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 className={cn(

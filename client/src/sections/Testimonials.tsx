@@ -36,6 +36,7 @@ const sampleTestimonials = [
 
 export default function Testimonials() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const [testimonials, setTestimonials] = useState<any[]>(sampleTestimonials);
 
   useEffect(() => {
@@ -73,7 +74,7 @@ export default function Testimonials() {
           {testimonials.map((testimonial, i) => (
             <motion.div
               key={testimonial.id}
-              initial={{ opacity: 0, y: 60 }}
+              initial={isMobile ? false : { opacity: 0, y: 60 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
               className="glass rounded-2xl p-8 relative"

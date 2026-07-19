@@ -18,6 +18,7 @@ export default function SectionHeading({
   align = 'center',
 }: SectionHeadingProps) {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <div
@@ -30,7 +31,7 @@ export default function SectionHeading({
       )}
     >
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={isMobile ? false : { opacity: 0, y: 40 }}
         animate={isVisible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, ease: [0.77, 0, 0.18, 1] }}
       >
@@ -52,7 +53,7 @@ export default function SectionHeading({
         </h2>
         {subtitle && (
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={isMobile ? false : { opacity: 0, y: 20 }}
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.77, 0, 0.18, 1] }}
             className="mt-6 text-lg leading-relaxed text-luxury-gray md:text-xl"

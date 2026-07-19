@@ -5,6 +5,7 @@ import MagneticButton from '@components/buttons/MagneticButton';
 
 export default function CTA() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <section ref={ref} className="relative py-16 md:py-20 lg:py-32 overflow-hidden">
@@ -15,7 +16,7 @@ export default function CTA() {
 
       <div className="relative mx-auto max-w-4xl px-6 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={isMobile ? false : { opacity: 0, y: 40 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.77, 0, 0.18, 1] }}
         >

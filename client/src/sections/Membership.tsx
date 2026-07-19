@@ -10,6 +10,7 @@ import api from '@services/api';
 export default function Membership() {
   const [yearly, setYearly] = useState(false);
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const samplePlans = [
     { name: 'Basic', description: 'Essential access for beginners', popular: false, price: { monthly: 999, yearly: 9999 }, features: ['Gym access (6am-10pm)', 'Basic equipment', 'Locker room access', '1 group class/week'] },
     { name: 'Premium', description: 'Full access with group classes', popular: true, price: { monthly: 1799, yearly: 17999 }, features: ['24/7 gym access', 'All equipment & zones', 'Unlimited group classes', '2 PT sessions/month', 'Sauna access', 'Guest pass (2x/month)'] },
@@ -117,7 +118,7 @@ export default function Membership() {
             {plans.map((plan, i) => (
               <motion.div
                 key={plan.name}
-                initial={{ opacity: 0, y: 60 }}
+                initial={isMobile ? false : { opacity: 0, y: 60 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
                 className={cn(
