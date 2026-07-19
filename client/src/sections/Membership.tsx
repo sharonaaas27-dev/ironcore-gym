@@ -62,7 +62,7 @@ export default function Membership() {
   }, []);
 
   return (
-    <section ref={ref} id="membership" className="relative py-32">
+    <section ref={ref} id="membership" className="relative py-16 md:py-20 lg:py-32">
       <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
 
       <div className="relative mx-auto max-w-7xl px-6">
@@ -128,7 +128,7 @@ export default function Membership() {
                 transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
                 className={cn(
                   'glass rounded-2xl p-8 relative transition-all duration-500',
-                  plan.popular && 'border-gold-500/50 scale-105 shadow-gold'
+                  plan.popular && 'border-gold-500/50 md:scale-105 shadow-gold'
                 )}
               >
                 {plan.popular && (
@@ -143,7 +143,7 @@ export default function Membership() {
                 <p className="mt-2 text-sm text-luxury-gray">{plan.description}</p>
 
                 <div className="mt-6 flex items-baseline gap-1">
-                  <span className="text-5xl font-bold text-white">
+                  <span className="text-4xl md:text-5xl font-bold text-white">
                     ₹{yearly ? plan.price.yearly.toLocaleString() : plan.price.monthly.toLocaleString()}
                   </span>
                   <span className="text-sm text-luxury-gray">

@@ -23,7 +23,7 @@ export default function SectionHeading({
     <div
       ref={ref}
       className={cn(
-        'mb-16 max-w-3xl',
+        'mb-10 md:mb-16 max-w-3xl',
         align === 'center' && 'mx-auto text-center',
         align === 'right' && 'ml-auto text-right',
         className

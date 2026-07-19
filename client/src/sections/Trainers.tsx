@@ -48,7 +48,7 @@ export default function Trainers() {
   }, []);
 
   return (
-    <section ref={ref} id="trainers" className="relative py-32">
+    <section ref={ref} id="trainers" className="relative py-16 md:py-20 lg:py-32">
       <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/20 to-luxury-black" />
 
       <div className="relative mx-auto max-w-7xl px-6">
@@ -81,7 +81,7 @@ export default function Trainers() {
                 transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
                 className="group glass rounded-2xl overflow-hidden hover-lift"
               >
-                <div className="relative h-72 overflow-hidden">
+                <div className="relative h-60 md:h-72 overflow-hidden">
                   <img
                     src={trainer.image}
                     alt={trainer.name}
@@ -104,7 +104,7 @@ export default function Trainers() {
                     </a>
                   </div>
                 </div>
-                <div className="p-6">
+                <div className="p-4 md:p-6">
                   <h3 className="text-lg font-bold text-white group-hover:text-gold-500 transition-colors">
                     {trainer.name}
                   </h3>

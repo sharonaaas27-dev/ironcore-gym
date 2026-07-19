@@ -39,7 +39,7 @@ export default function Programs() {
 
   if (loading) {
     return (
-      <section ref={ref} id="programs" className="relative py-32">
+    <section ref={ref} id="programs" className="relative py-16 md:py-20 lg:py-32">
         <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
         <div className="relative mx-auto max-w-7xl px-6 flex items-center justify-center min-h-[50vh]">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-gold-500 border-t-transparent" />
@@ -67,7 +67,7 @@ export default function Programs() {
                 transition={{ duration: 0.6, delay: i * 0.1, ease: [0.77, 0, 0.18, 1] }}
                 className="group glass rounded-2xl overflow-hidden hover-lift"
               >
-                <div className="relative h-56 overflow-hidden">
+                <div className="relative h-48 md:h-56 overflow-hidden">
                   <img
                     src={program.image}
                     alt={program.title}
@@ -84,7 +84,7 @@ export default function Programs() {
                     </span>
                   </div>
                 </div>
-                <div className="p-6">
+                <div className="p-4 md:p-6">
                   <h3 className="text-xl font-bold text-white group-hover:text-gold-500 transition-colors">
                     {program.title}
                   </h3>
