@@ -160,14 +160,14 @@ export default function Hero() {
               </MagneticButton>
             </div>
 
-            <div className="mt-16 grid grid-cols-3 gap-12 border-t border-glass-light pt-8">
+            <div className="mt-16 grid grid-cols-3 gap-16 border-t border-glass-light pt-10">
               {stats.map((stat) => (
-                <div key={stat.label} className="p-2">
+                <div key={stat.label} className="p-6">
                   <AnimatedCounter
                     target={stat.target}
                     suffix={stat.suffix}
                   />
-                  <p className="mt-2 text-sm text-luxury-gray">{stat.label}</p>
+                  <p className="mt-3 text-sm text-luxury-gray">{stat.label}</p>
                 </div>
               ))}
             </div>
