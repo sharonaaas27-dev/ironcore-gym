@@ -160,9 +160,9 @@ export default function Hero() {
               </MagneticButton>
             </div>
 
-            <div className="mt-16 grid grid-cols-3 gap-8 border-t border-glass-light pt-8">
+            <div className="mt-16 grid grid-cols-3 gap-12 border-t border-glass-light pt-8">
               {stats.map((stat) => (
-                <div key={stat.label}>
+                <div key={stat.label} className="p-2">
                   <AnimatedCounter
                     target={stat.target}
                     suffix={stat.suffix}
@@ -195,9 +195,6 @@ export default function Hero() {
           transition={{ duration: 2, repeat: Infinity }}
           className="flex flex-col items-center gap-2"
         >
-          <span className="text-xs tracking-widest text-luxury-gray uppercase">
-            Scroll
-          </span>
           <div className="h-8 w-[1px] bg-gold-500/50" />
         </motion.div>
       </div>

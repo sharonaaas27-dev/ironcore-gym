@@ -44,6 +44,20 @@ export default function Navbar() {
     setIsOpen(false);
   }, [location]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isOpen]);
+
   return (
     <nav
       className={cn(
@@ -209,10 +223,11 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="glass-dark fixed inset-0 flex flex-col items-center justify-center gap-8 md:hidden"
+            data-lenis-prevent
+            className="glass-dark fixed inset-0 flex flex-col items-center overflow-y-auto py-32 gap-6 md:hidden"
           >
             {user?.role === 'admin' ? (
-              <Link to="/admin" className="text-2xl font-bold tracking-wider uppercase text-gold-500">
+              <Link to="/admin" className="text-base font-semibold tracking-wider uppercase text-gold-500">
                 Admin Panel
               </Link>
             ) : (
@@ -221,7 +236,7 @@ export default function Navbar() {
                   key={link.href}
                   to={link.href}
                   className={cn(
-                    'text-2xl font-bold tracking-wider uppercase transition-colors',
+                    'text-base font-semibold tracking-wider uppercase transition-colors',
                     location.pathname === link.href
                       ? 'gradient-text'
                       : 'text-white hover:text-gold-500'
@@ -235,7 +250,7 @@ export default function Navbar() {
               user?.role === 'admin' ? (
                 <button
                   onClick={() => { logout(); navigate('/login'); setIsOpen(false); }}
-                  className="text-2xl font-bold tracking-wider uppercase text-red-400"
+                  className="text-base font-semibold tracking-wider uppercase text-red-400"
                 >
                   Logout
                 </button>
@@ -243,13 +258,13 @@ export default function Navbar() {
                 <>
                   <Link
                     to={user?.role === 'trainer' ? '/trainer/dashboard' : '/dashboard'}
-                    className="text-2xl font-bold tracking-wider uppercase text-white"
+                    className="text-base font-semibold tracking-wider uppercase text-white"
                   >
                     Dashboard
                   </Link>
                   <button
                     onClick={() => { logout(); navigate('/login'); setIsOpen(false); }}
-                    className="text-2xl font-bold tracking-wider uppercase text-red-400"
+                    className="text-base font-semibold tracking-wider uppercase text-red-400"
                   >
                     Logout
                   </button>
@@ -257,12 +272,12 @@ export default function Navbar() {
               )
             ) : (
               <>
-                <Link to="/login" className="text-2xl font-bold tracking-wider uppercase text-white">
+                <Link to="/login" className="text-base font-semibold tracking-wider uppercase text-white">
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="mt-4 rounded-full bg-gold-500 px-8 py-3 text-lg font-semibold text-luxury-black"
+                  className="rounded-full bg-gold-500 px-6 py-2.5 text-sm font-semibold text-luxury-black"
                 >
                   Join Now
                 </Link>
