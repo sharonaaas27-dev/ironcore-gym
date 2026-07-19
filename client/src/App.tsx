@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import ErrorBoundary from '@components/ui/ErrorBoundary';
 import LoadingScreen from '@components/ui/LoadingScreen';
 import ScrollToTop from '@components/ui/ScrollToTop';
@@ -63,8 +64,10 @@ export default function App() {
     setNavigate(navigate);
   }, [navigate]);
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
-    <>
+    <MotionConfig reducedMotion={isMobile ? 'always' : 'never'}>
       <LoadingScreen />
       <ScrollToTop />
       <ErrorBoundary>
@@ -131,6 +134,6 @@ export default function App() {
               </Routes>
             </Suspense>
       </ErrorBoundary>
-    </>
+    </MotionConfig>
   );
 }
