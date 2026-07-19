@@ -1,10 +1,8 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 import ErrorBoundary from '@components/ui/ErrorBoundary';
 import LoadingScreen from '@components/ui/LoadingScreen';
 import ScrollToTop from '@components/ui/ScrollToTop';
-import PageTransition from '@components/ui/PageTransition';
 import Navbar from '@components/navbar/Navbar';
 import Footer from '@components/layout/Footer';
 import AdminRoute from '@components/admin/AdminRoute';
@@ -70,15 +68,13 @@ export default function App() {
       <LoadingScreen />
       <ScrollToTop />
       <ErrorBoundary>
-        <AnimatePresence mode="wait">
-          <motion.div key={location.pathname}>
-            <Suspense fallback={
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-black">
-                <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
-              </div>
-            }>
-              <Routes location={location} key={location.pathname}>
-                <Route path="/" element={<Home />} />
+        <Suspense fallback={
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-black">
+            <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
+          </div>
+        }>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/programs" element={<Programs />} />
                 <Route path="/programs/:slug" element={<ProgramDetail />} />
@@ -101,7 +97,7 @@ export default function App() {
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
                 <Route path="/trainer/dashboard" element={<TrainerRoute><TrainerDashboard /></TrainerRoute>} />
-                <Route path="/trainer/contacts" element={<TrainerRoute><PageTransition><div className="noise-bg" /><Navbar /><main className="min-h-screen pt-32"><div className="relative mx-auto max-w-7xl px-6 py-16"><AdminContacts /></div></main><Footer /></PageTransition></TrainerRoute>} />
+                <Route path="/trainer/contacts" element={<TrainerRoute><><Navbar /><main className="min-h-screen pt-32"><div className="relative mx-auto max-w-7xl px-6 py-16"><AdminContacts /></div></main><Footer /></></TrainerRoute>} />
                 <Route path="/trainer/pending" element={<TrainerPending />} />
                 <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                 <Route path="/privacy" element={<Privacy />} />
@@ -134,8 +130,6 @@ export default function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
-          </motion.div>
-        </AnimatePresence>
       </ErrorBoundary>
     </>
   );

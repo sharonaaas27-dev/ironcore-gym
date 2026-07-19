@@ -1,6 +1,6 @@
 import { motion, type Variants } from 'framer-motion';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
-import type { ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 
 interface StaggerRevealProps {
   children: ReactNode;
@@ -16,6 +16,8 @@ export default function StaggerReveal({
   variants: customVariants,
 }: StaggerRevealProps) {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const fallbackRef = useRef<HTMLDivElement>(null);
 
   const defaultVariants: Variants = {
     hidden: { opacity: 0, y: 40 },
@@ -25,6 +27,10 @@ export default function StaggerReveal({
       transition: { staggerChildren: staggerDelay, delayChildren: 0.2 },
     },
   };
+
+  if (isMobile) {
+    return <div ref={fallbackRef} className={className}>{children}</div>;
+  }
 
   return (
     <motion.div

@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function LoadingScreen() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() =>
+    typeof window !== 'undefined' && window.innerWidth >= 768
+  );
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    if (window.innerWidth < 768) return;
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
