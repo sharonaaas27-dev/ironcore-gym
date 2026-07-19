@@ -22,7 +22,9 @@ export default function AnimatedCounter({
     if (!isVisible || hasAnimated.current) return;
     hasAnimated.current = true;
 
-    const steps = duration * 60;
+    const isMobile = window.innerWidth < 768;
+    const fps = isMobile ? 20 : 60;
+    const steps = duration * fps;
     const increment = target / steps;
     let current = 0;
 
@@ -34,7 +36,7 @@ export default function AnimatedCounter({
       } else {
         setCount(Math.floor(current));
       }
-    }, 1000 / 60);
+    }, 1000 / fps);
 
     return () => clearInterval(timer);
   }, [isVisible, target, duration]);

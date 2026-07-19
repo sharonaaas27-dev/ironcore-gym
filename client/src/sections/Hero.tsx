@@ -42,8 +42,9 @@ export default function Hero() {
   }, [user]);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
     const ctx = gsap.context(() => {
-      if (textRef.current) {
+      if (textRef.current && !isMobile) {
         const chars = textRef.current.querySelectorAll('.char');
         gsap.from(chars, {
           y: 100,
@@ -54,7 +55,7 @@ export default function Hero() {
           ease: 'power4.out',
         });
       }
-      if (subtitleRef.current) {
+      if (subtitleRef.current && !isMobile) {
         gsap.from(subtitleRef.current, {
           y: 40,
           opacity: 0,
@@ -64,6 +65,13 @@ export default function Hero() {
         });
       }
     }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -79,10 +87,7 @@ export default function Hero() {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      ctx.revert();
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
@@ -94,8 +99,8 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-luxury-black/80 via-luxury-black/50 to-luxury-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,160,23,0.15),transparent_70%)]" />
         <div className="noise-overlay absolute inset-0" />
-        <div className="absolute -left-1/4 -top-1/4 h-[600px] w-[600px] animate-blob1 rounded-full bg-gold-500/20 blur-[150px]" />
-        <div className="absolute -right-1/4 -bottom-1/4 h-[500px] w-[500px] animate-blob2 rounded-full bg-gold-400/10 blur-[150px]" />
+        <div className="hidden md:block absolute -left-1/4 -top-1/4 h-[600px] w-[600px] animate-blob1 rounded-full bg-gold-500/20 blur-[150px]" />
+        <div className="hidden md:block absolute -right-1/4 -bottom-1/4 h-[500px] w-[500px] animate-blob2 rounded-full bg-gold-400/10 blur-[150px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 pt-32">
