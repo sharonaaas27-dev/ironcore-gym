@@ -158,7 +158,7 @@ export default function Hero() {
               <MagneticButton>
                 <Link
                   to="/programs"
-                  className="inline-flex items-center gap-2 rounded-full border border-glass-light px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-full border border-glass-light px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10 md:backdrop-blur-sm"
                 >
                   Explore Programs
                 </Link>

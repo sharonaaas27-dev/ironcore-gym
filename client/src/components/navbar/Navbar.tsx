@@ -227,7 +227,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             data-lenis-prevent
-            className="fixed inset-0 flex h-screen flex-col items-center justify-center overflow-y-auto bg-black/85 backdrop-blur-2xl border border-white/10 py-24 gap-3 md:hidden"
+            className="fixed inset-0 flex h-screen flex-col items-center justify-center overflow-y-auto bg-black/90 py-24 gap-3 md:hidden"
           >
             {user?.role === 'admin' ? (
               <Link to="/admin" className="text-base font-semibold tracking-wider uppercase text-gold-500">

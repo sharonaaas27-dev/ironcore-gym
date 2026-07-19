@@ -126,3 +126,13 @@
     backface-visibility: hidden;
   }
 }
+
+@media (max-width: 767px) {
+  .glass, .glass-heavy, .glass-dark {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .noise-overlay::after {
+    display: none !important;
+  }
+}
