@@ -112,7 +112,7 @@ export default function Hero() {
 
             <h1
               ref={textRef}
-              className="text-display-md md:text-display-lg lg:text-display-xl font-bold tracking-tighter"
+              className="text-display-md md:text-display-lg lg:text-display-lg font-bold tracking-tighter"
             >
               {'TRAIN WITH'.split('').map((char, i) => (
                 <span key={i} className="char inline-block">
