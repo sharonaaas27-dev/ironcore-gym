@@ -15,8 +15,8 @@ export default function Trainers() {
     { id: 'demo-4', name: 'Ananya Singh', role: 'Nutrition & Wellness Coach', image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&q=80', specialties: ['Nutrition', 'Weight Loss', 'Wellness'], experience: '7 years', social: { instagram: '#', linkedin: '#' } },
   ];
 
-  const [trainers, setTrainers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [trainers, setTrainers] = useState<any[]>(placeholderTrainers);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -38,11 +38,9 @@ export default function Trainers() {
               linkedin: t.socialLinks?.linkedin || '#',
             },
           })));
-        } else {
-          setTrainers(placeholderTrainers);
         }
       })
-      .catch(() => { if (mounted) setTrainers(placeholderTrainers); })
+      .catch(() => { if (mounted) setError(''); })
       .finally(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };
   }, []);
@@ -57,21 +55,15 @@ export default function Trainers() {
           subtitle="Trainer profiles shown for demonstration. Information will be updated by the gym."
         />
 
-        {loading && (
-          <div className="flex justify-center py-20">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
-          </div>
-        )}
-
         {error && (
           <p className="mt-8 text-center text-red-400">{error}</p>
         )}
 
-        {!loading && !error && trainers.length === 0 && (
+        {trainers.length === 0 && (
           <p className="mt-8 text-center text-luxury-gray">No trainers available at the moment.</p>
         )}
 
-        {!loading && !error && trainers.length > 0 && (
+        {trainers.length > 0 && (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {trainers.map((trainer, i) => (
               <motion.div

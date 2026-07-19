@@ -16,15 +16,13 @@ export default function Membership() {
     { name: 'Elite', description: 'The ultimate VIP experience', popular: false, price: { monthly: 2499, yearly: 24999 }, features: ['24/7 premium access', 'All equipment & zones', 'Locker room, sauna & steam', 'Unlimited classes & workshops', '4 PT sessions/month', 'Custom nutrition plan', 'Unlimited guest passes', 'Priority booking'] },
   ];
 
-  const [plans, setPlans] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [plans, setPlans] = useState<any[]>(samplePlans);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        setLoading(true);
-        setError(null);
         const res = await api.get('/memberships');
         const data = res.data.data;
         if (data && data.length > 0) {
@@ -49,13 +47,9 @@ export default function Membership() {
             }
           });
           setPlans(Object.values(grouped));
-        } else {
-          setPlans(samplePlans);
         }
       } catch (err) {
-        setPlans(samplePlans);
-      } finally {
-        setLoading(false);
+        // use sample data
       }
     };
     fetchPlans();

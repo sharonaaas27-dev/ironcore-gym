@@ -17,8 +17,8 @@ const samplePrograms = [
 
 export default function Programs() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const [programs, setPrograms] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [programs, setPrograms] = useState<any[]>(samplePrograms);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     api.get('/programs')
@@ -26,27 +26,10 @@ export default function Programs() {
         const data = res.data.data;
         if (data && data.length > 0) {
           setPrograms(data);
-        } else {
-          setPrograms(samplePrograms);
         }
-        setLoading(false);
       })
-      .catch(() => {
-        setPrograms(samplePrograms);
-        setLoading(false);
-      });
+      .catch(() => {});
   }, []);
-
-  if (loading) {
-    return (
-    <section ref={ref} id="programs" className="relative py-16 md:py-20 lg:py-32">
-        <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
-        <div className="relative mx-auto max-w-7xl px-6 flex items-center justify-center min-h-[50vh]">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-gold-500 border-t-transparent" />
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section ref={ref} id="programs" className="relative py-32">

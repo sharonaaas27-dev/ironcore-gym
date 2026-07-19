@@ -5,15 +5,41 @@ import SectionHeading from '@components/ui/SectionHeading';
 import { FaStar, FaQuoteLeft } from 'react-icons/fa';
 import api from '@services/api';
 
+const sampleTestimonials = [
+  {
+    id: 's1',
+    name: 'Vikram Rajan',
+    role: 'Member since 2023',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
+    content: 'Joined Ash2 Fitness 6 months ago and it has completely transformed my lifestyle. The trainers are incredibly supportive and the equipment is top-notch.',
+    rating: 5,
+    transformation: { before: '85 kg', after: '72 kg' },
+  },
+  {
+    id: 's2',
+    name: 'Meera Nair',
+    role: 'Member since 2024',
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
+    content: 'The CrossFit program here is amazing. The community keeps me motivated and I have never felt stronger. Highly recommend!',
+    rating: 5,
+    transformation: { before: '68 kg', after: '60 kg' },
+  },
+  {
+    id: 's3',
+    name: 'Arjun Menon',
+    role: 'Member since 2022',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80',
+    content: 'Best decision I ever made for my health. The personalized attention from trainers and the variety of programs keep every session exciting and effective.',
+    rating: 5,
+  },
+];
+
 export default function Testimonials() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const [testimonials, setTestimonials] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [testimonials, setTestimonials] = useState<any[]>(sampleTestimonials);
 
   useEffect(() => {
     let mounted = true;
-    setLoading(true);
     api.get('/testimonials')
       .then((res) => {
         if (!mounted) return;
@@ -29,77 +55,12 @@ export default function Testimonials() {
           })));
         }
       })
-      .catch(() => { if (mounted) setError(true); })
-      .finally(() => { if (mounted) setLoading(false); });
+      .catch(() => {});
     return () => { mounted = false; };
   }, []);
 
-  if (loading) {
-    return (
-      <section className="relative py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
-        <div className="relative mx-auto max-w-7xl px-6">
-          <SectionHeading
-            title="$Transformation Stories"
-            subtitle="Real results from real people. Every journey is unique, but the destination is the same: a stronger, healthier you."
-          />
-          <div className="grid gap-8 md:grid-cols-3">
-            {[1, 2, 3].map((_, i) => (
-              <div key={i} className="glass rounded-2xl p-8 relative animate-pulse">
-                <div className="mb-4 h-4 w-24 bg-white/10 rounded" />
-                <div className="mb-6 space-y-2">
-                  <div className="h-3 bg-white/10 rounded w-full" />
-                  <div className="h-3 bg-white/10 rounded w-5/6" />
-                  <div className="h-3 bg-white/10 rounded w-4/6" />
-                </div>
-                <div className="mb-6 h-16 bg-white/10 rounded-xl" />
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-white/10" />
-                  <div className="space-y-1">
-                    <div className="h-3 w-20 bg-white/10 rounded" />
-                    <div className="h-2 w-14 bg-white/10 rounded" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="relative py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
-        <div className="relative mx-auto max-w-7xl px-6">
-          <SectionHeading
-            title="$Transformation Stories"
-            subtitle="Real results from real people. Every journey is unique, but the destination is the same: a stronger, healthier you."
-          />
-          <p className="text-center text-luxury-gray">Unable to load testimonials. Please try again later.</p>
-        </div>
-      </section>
-    );
-  }
-
-  if (testimonials.length === 0) {
-    return (
-      <section className="relative py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
-        <div className="relative mx-auto max-w-7xl px-6">
-          <SectionHeading
-            title="$Transformation Stories"
-            subtitle="Real results from real people. Every journey is unique, but the destination is the same: a stronger, healthier you."
-          />
-          <p className="text-center text-luxury-gray">No testimonials available yet.</p>
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden">
+    <section ref={ref} className="relative py-16 md:py-20 lg:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
 
       <div className="relative mx-auto max-w-7xl px-6">

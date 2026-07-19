@@ -17,14 +17,13 @@ const placeholderImages = [
 const sizePattern = ['large', 'small', 'small', 'large', 'medium', 'medium'];
 
 export default function Gallery() {
-  const [images, setImages] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [images, setImages] = useState<any[]>(placeholderImages);
+  const [loading, setLoading] = useState(false);
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
 
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        setLoading(true);
         const response = await api.get('/gallery');
         const data = response.data.data;
         if (data && data.length > 0) {
@@ -35,14 +34,8 @@ export default function Gallery() {
             size: sizePattern[i % sizePattern.length],
           }));
           setImages(mapped);
-        } else {
-          setImages(placeholderImages);
         }
-      } catch (err) {
-        setImages(placeholderImages);
-      } finally {
-        setLoading(false);
-      }
+      } catch (err) {}
     };
     fetchGallery();
   }, []);
@@ -57,16 +50,12 @@ export default function Gallery() {
           subtitle="Experience premium training environments designed for peak performance."
         />
 
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-gold-500 border-t-transparent" />
-          </div>
-        ) : images.length === 0 ? (
+        {images.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-lg text-luxury-gray">No gallery images available at the moment.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:grid-rows-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:grid-rows-2">
             {images.map((image, i) => (
               <motion.div
                 key={image._id}
