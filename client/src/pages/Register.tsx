@@ -68,7 +68,7 @@ export default function Register() {
       window.google.accounts.id.renderButton(googleBtnRef.current, {
         theme: 'filled_black',
         size: 'large',
-        width: '320',
+        width: window.innerWidth < 640 ? '260' : '320',
       });
     }
   }, [googleLogin, navigate, googleClientId, googleRole]);

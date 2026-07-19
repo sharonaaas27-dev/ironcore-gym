@@ -68,11 +68,11 @@ export default function Navbar() {
       )}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="relative z-10">
+        <Link to="/" className="relative z-10 flex items-center gap-2">
           <h1 className="text-2xl font-bold tracking-tighter">
             Ash2<span className="gradient-text">Fitness</span>
           </h1>
-          <span className="absolute -top-2 -right-20 rounded-full border border-gold-500/40 bg-luxury-black px-2 py-0.5 text-[10px] font-medium text-gold-500 tracking-wider whitespace-nowrap">
+          <span className="rounded-full border border-gold-500/40 bg-luxury-black px-2 py-0.5 text-[10px] font-medium text-gold-500 tracking-wider whitespace-nowrap">
             Demo Concept
           </span>
         </Link>
@@ -227,7 +227,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             data-lenis-prevent
-            className="glass-dark fixed inset-0 flex flex-col items-center overflow-y-auto py-32 gap-6 md:hidden"
+            className="fixed inset-0 flex h-screen flex-col items-center justify-center overflow-y-auto bg-black/85 backdrop-blur-2xl border border-white/10 py-24 gap-3 md:hidden"
           >
             {user?.role === 'admin' ? (
               <Link to="/admin" className="text-base font-semibold tracking-wider uppercase text-gold-500">
