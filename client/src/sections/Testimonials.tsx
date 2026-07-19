@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
 import SectionHeading from '@components/ui/SectionHeading';
 import { FaStar, FaQuoteLeft } from 'react-icons/fa';
@@ -35,8 +34,7 @@ const sampleTestimonials = [
 ];
 
 export default function Testimonials() {
-  const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const { ref } = useScrollAnimation<HTMLElement>();
   const [testimonials, setTestimonials] = useState<any[]>(sampleTestimonials);
 
   useEffect(() => {
@@ -72,11 +70,8 @@ export default function Testimonials() {
 
         <div className="grid gap-8 md:grid-cols-3">
           {testimonials.map((testimonial, i) => (
-            <motion.div
+            <div
               key={testimonial.id}
-              initial={isMobile ? false : { opacity: 0, y: 60 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
               className="glass rounded-2xl p-8 relative"
             >
               <FaQuoteLeft className="absolute top-6 right-6 text-3xl text-gold-500/20" />
@@ -114,7 +109,7 @@ export default function Testimonials() {
                   <p className="text-xs text-gold-500">{testimonial.role}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

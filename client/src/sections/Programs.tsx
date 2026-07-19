@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import api from '@services/api';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
@@ -16,8 +15,7 @@ const samplePrograms = [
 ];
 
 export default function Programs() {
-  const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const { ref } = useScrollAnimation<HTMLElement>();
   const [programs, setPrograms] = useState<any[]>(samplePrograms);
   const [loading, setLoading] = useState(false);
 
@@ -33,7 +31,7 @@ export default function Programs() {
   }, []);
 
   return (
-    <section ref={ref} id="programs" className="relative py-32">
+    <section ref={ref} id="programs" className="relative py-16 md:py-20 lg:py-32">
       <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/30 to-luxury-black" />
 
       <div className="relative mx-auto max-w-7xl px-6">
@@ -45,13 +43,10 @@ export default function Programs() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {programs.map((program, i) => (
             <Link key={program.slug} to={`/programs/${program.slug}`}>
-              <motion.div
-                initial={isMobile ? false : { opacity: 0, y: 60 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.1, ease: [0.77, 0, 0.18, 1] }}
+              <div
                 className="group glass rounded-2xl overflow-hidden hover-lift"
               >
-                <div className="relative h-48 md:h-56 overflow-hidden">
+                <div className="relative h-48 md:h-56 overflow-hidden bg-luxury-dark">
                   <img
                     src={program.image}
                     alt={program.title}
@@ -80,7 +75,7 @@ export default function Programs() {
                     <span className="transition-transform group-hover:translate-x-1">→</span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </Link>
           ))}
         </div>

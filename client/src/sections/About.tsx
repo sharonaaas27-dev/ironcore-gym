@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
 import { HiArrowRight } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
@@ -28,8 +27,7 @@ const features = [
 ];
 
 export default function About() {
-  const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const { ref } = useScrollAnimation<HTMLElement>();
 
   return (
     <section ref={ref} id="about" className="relative overflow-hidden py-16 md:py-20 lg:py-32">
@@ -43,25 +41,19 @@ export default function About() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, i) => (
-            <motion.div
+            <div
               key={feature.title}
-              initial={isMobile ? false : { opacity: 0, y: 60 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
               className="group glass rounded-2xl p-8 hover-lift"
             >
               <span className="mb-4 inline-block text-4xl">{feature.icon}</span>
               <h3 className="mb-3 text-xl font-bold text-white">{feature.title}</h3>
               <p className="text-luxury-gray leading-relaxed">{feature.description}</p>
               <div className="mt-6 h-[2px] w-0 bg-gold-500 transition-all duration-500 group-hover:w-full" />
-            </motion.div>
+            </div>
           ))}
         </div>
 
-        <motion.div
-          initial={isMobile ? false : { opacity: 0, y: 40 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
+        <div
           className="mt-16 text-center"
         >
           <Link
@@ -73,7 +65,7 @@ export default function About() {
             </span>
             <HiArrowRight className="transition-transform group-hover:translate-x-1" />
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

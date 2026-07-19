@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
 import SectionHeading from '@components/ui/SectionHeading';
@@ -7,8 +6,7 @@ import { FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import api from '@services/api';
 
 export default function Trainers() {
-  const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const { ref } = useScrollAnimation<HTMLElement>();
   const placeholderTrainers = [
     { id: 'demo-1', name: 'Rahul Sharma', role: 'Certified Strength Coach', image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&q=80', specialties: ['Strength Training', 'Powerlifting'], experience: '8 years', social: { instagram: '#', linkedin: '#' } },
     { id: 'demo-2', name: 'Priya Patel', role: 'CrossFit & HIIT Specialist', image: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=400&q=80', specialties: ['CrossFit', 'HIIT', 'Functional Training'], experience: '6 years', social: { instagram: '#', linkedin: '#' } },
@@ -67,14 +65,11 @@ export default function Trainers() {
         {trainers.length > 0 && (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {trainers.map((trainer, i) => (
-              <motion.div
+              <div
                 key={trainer.id}
-                initial={isMobile ? false : { opacity: 0, y: 60 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
                 className="group glass rounded-2xl overflow-hidden hover-lift"
               >
-                <div className="relative h-60 md:h-72 overflow-hidden">
+                <div className="relative h-60 md:h-72 overflow-hidden bg-luxury-dark">
                   <img
                     src={trainer.image}
                     alt={trainer.name}
@@ -120,15 +115,12 @@ export default function Trainers() {
                     Book Session →
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}
 
-        <motion.div
-          initial={isMobile ? false : { opacity: 0, y: 40 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
+        <div
           className="mt-12 text-center"
         >
           <Link
@@ -137,7 +129,7 @@ export default function Trainers() {
           >
             View All Trainers →
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

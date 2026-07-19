@@ -1,11 +1,9 @@
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
 import MagneticButton from '@components/buttons/MagneticButton';
 
 export default function CTA() {
-  const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const { ref } = useScrollAnimation<HTMLElement>();
 
   return (
     <section ref={ref} className="relative py-16 md:py-20 lg:py-32 overflow-hidden">
@@ -15,10 +13,7 @@ export default function CTA() {
       </div>
 
       <div className="relative mx-auto max-w-4xl px-6 text-center">
-        <motion.div
-          initial={isMobile ? false : { opacity: 0, y: 40 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: [0.77, 0, 0.18, 1] }}
+        <div
         >
           <h2 className="text-display-sm md:text-display-md font-bold tracking-tight text-white">
             Ready to Transform
@@ -54,7 +49,7 @@ export default function CTA() {
           <p className="mt-6 text-sm text-luxury-gray">
             No commitment required. Cancel anytime.
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

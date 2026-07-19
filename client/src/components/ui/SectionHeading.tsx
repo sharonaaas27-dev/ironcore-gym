@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
 import { cn } from '@utils/cn';
 
@@ -17,8 +16,7 @@ export default function SectionHeading({
   className,
   align = 'center',
 }: SectionHeadingProps) {
-  const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const { ref } = useScrollAnimation<HTMLDivElement>();
 
   return (
     <div
@@ -30,10 +28,7 @@ export default function SectionHeading({
         className
       )}
     >
-      <motion.div
-        initial={isMobile ? false : { opacity: 0, y: 40 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, ease: [0.77, 0, 0.18, 1] }}
+      <div
       >
         <h2
           className={cn(
@@ -52,16 +47,13 @@ export default function SectionHeading({
           )}
         </h2>
         {subtitle && (
-          <motion.p
-            initial={isMobile ? false : { opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.77, 0, 0.18, 1] }}
+          <p
             className="mt-6 text-lg leading-relaxed text-luxury-gray md:text-xl"
           >
             {subtitle}
-          </motion.p>
+          </p>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
 import SectionHeading from '@components/ui/SectionHeading';
@@ -9,8 +8,7 @@ import api from '@services/api';
 
 export default function Membership() {
   const [yearly, setYearly] = useState(false);
-  const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const { ref } = useScrollAnimation<HTMLElement>();
   const samplePlans = [
     { name: 'Basic', description: 'Essential access for beginners', popular: false, price: { monthly: 999, yearly: 9999 }, features: ['Gym access (6am-10pm)', 'Basic equipment', 'Locker room access', '1 group class/week'] },
     { name: 'Premium', description: 'Full access with group classes', popular: true, price: { monthly: 1799, yearly: 17999 }, features: ['24/7 gym access', 'All equipment & zones', 'Unlimited group classes', '2 PT sessions/month', 'Sauna access', 'Guest pass (2x/month)'] },
@@ -116,11 +114,8 @@ export default function Membership() {
         ) : (
           <div className="grid gap-8 md:grid-cols-3">
             {plans.map((plan, i) => (
-              <motion.div
+              <div
                 key={plan.name}
-                initial={isMobile ? false : { opacity: 0, y: 60 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.15, ease: [0.77, 0, 0.18, 1] }}
                 className={cn(
                   'glass rounded-2xl p-8 relative transition-all duration-500',
                   plan.popular && 'border-gold-500/50 md:scale-105 shadow-gold'
@@ -166,7 +161,7 @@ export default function Membership() {
                 >
                   Get {plan.name}
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useScrollAnimation } from '@hooks/useScrollAnimation';
 import SectionHeading from '@components/ui/SectionHeading';
 import { cn } from '@utils/cn';
@@ -19,8 +18,7 @@ const sizePattern = ['large', 'small', 'small', 'large', 'medium', 'medium'];
 export default function Gallery() {
   const [images, setImages] = useState<any[]>(placeholderImages);
   const [loading, setLoading] = useState(false);
-  const { ref, isVisible } = useScrollAnimation<HTMLElement>();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const { ref } = useScrollAnimation<HTMLElement>();
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -42,7 +40,7 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden">
+    <section ref={ref} className="relative py-16 md:py-20 lg:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-luxury-black" />
 
       <div className="relative mx-auto max-w-7xl px-6">
@@ -58,13 +56,10 @@ export default function Gallery() {
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:grid-rows-2">
             {images.map((image, i) => (
-              <motion.div
+              <div
                 key={image._id}
-                initial={isMobile ? false : { opacity: 0, scale: 0.9 }}
-                animate={isVisible ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
                 className={cn(
-                  'group relative overflow-hidden rounded-2xl cursor-pointer',
+                  'group relative overflow-hidden rounded-2xl cursor-pointer bg-luxury-dark',
                   image.size === 'large' && 'col-span-2 row-span-2',
                   image.size === 'medium' && 'col-span-1 row-span-1'
                 )}
@@ -81,7 +76,7 @@ export default function Gallery() {
                     {image.alt}
                   </span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}
