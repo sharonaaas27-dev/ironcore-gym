@@ -10,12 +10,13 @@ import Membership from '@sections/Membership';
 import Gallery from '@sections/Gallery';
 import CTA from '@sections/CTA';
 import Footer from '@components/layout/Footer';
-import PageTransition from '@components/ui/PageTransition';
 
 export default function Home() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
+    if (window.innerWidth < 768) return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -38,7 +39,7 @@ export default function Home() {
   }, []);
 
   return (
-    <PageTransition>
+    <>
       <div className="noise-bg" />
       <Navbar />
       <main>
@@ -52,6 +53,6 @@ export default function Home() {
         <CTA />
       </main>
       <Footer />
-    </PageTransition>
+    </>
   );
 }
