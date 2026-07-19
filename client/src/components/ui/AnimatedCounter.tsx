@@ -41,7 +41,7 @@ export default function AnimatedCounter({
 
   return (
     <div ref={ref} className="text-center">
-      <span className="text-5xl font-bold tracking-tighter text-white md:text-5xl lg:text-6xl">
+      <span className="text-3xl font-bold tracking-tighter text-white md:text-4xl lg:text-6xl">
         {prefix}
         {count.toLocaleString()}
         {suffix}
