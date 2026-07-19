@@ -183,10 +183,10 @@ export default function Hero() {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <div className="text-8xl font-black tracking-tighter text-white/5">
-                  ASH2
+                  IRONCORE
                 </div>
                 <div className="-mt-4 text-8xl font-black tracking-tighter text-gold-500/10">
-                  FITNESS
+                  IRONCORE
                 </div>
               </div>
             </div>

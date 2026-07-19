@@ -166,7 +166,7 @@ export default function Membership() {
           </div>
         )}
         <p className="mt-10 text-center text-xs text-luxury-gray/60">
-          Sample plans for demonstration. Final pricing will be customized by the gym.
+          Flexible plans designed to fit your fitness journey.
         </p>
       </div>
     </section>

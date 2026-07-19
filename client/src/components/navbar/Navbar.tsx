@@ -70,11 +70,8 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
         <Link to="/" className="relative z-10 flex items-center gap-2">
           <h1 className="text-2xl font-bold tracking-tighter">
-            Ash2<span className="gradient-text">Fitness</span>
+            IRON<span className="gradient-text">CORE</span>
           </h1>
-          <span className="rounded-full border border-gold-500/40 bg-luxury-black px-2 py-0.5 text-[10px] font-medium text-gold-500 tracking-wider whitespace-nowrap">
-            Demo Concept
-          </span>
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">

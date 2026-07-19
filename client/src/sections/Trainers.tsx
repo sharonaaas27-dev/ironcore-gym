@@ -51,7 +51,7 @@ export default function Trainers() {
       <div className="relative mx-auto max-w-7xl px-6">
         <SectionHeading
           title="Meet Our $Trainers"
-          subtitle="Trainer profiles shown for demonstration. Information will be updated by the gym."
+          subtitle="Dedicated professionals committed to your fitness journey."
         />
 
         {error && (

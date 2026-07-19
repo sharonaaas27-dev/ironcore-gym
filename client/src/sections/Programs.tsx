@@ -37,7 +37,7 @@ export default function Programs() {
       <div className="relative mx-auto max-w-7xl px-6">
         <SectionHeading
           title="Our $Programs"
-          subtitle="Sample programs shown for demonstration. Actual programs will be customized by the gym."
+          subtitle="From beginner to advanced, find the program that challenges you."
         />
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -79,9 +79,9 @@ export default function Programs() {
             </Link>
           ))}
         </div>
-        <p className="mt-10 text-center text-xs text-luxury-gray/60">
-          Sample programs for demonstration. Final lineup will be customized by the gym.
-        </p>
+          <p className="mt-10 text-center text-xs text-luxury-gray/60">
+            From beginner to advanced, find the program that challenges you.
+          </p>
       </div>
     </section>
   );
