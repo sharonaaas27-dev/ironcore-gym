@@ -7,7 +7,7 @@ export default function CTA() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
 
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden">
+    <section ref={ref} className="relative py-16 md:py-20 lg:py-32 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,160,23,0.2),transparent_70%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-luxury-charcoal/50 to-luxury-black" />
